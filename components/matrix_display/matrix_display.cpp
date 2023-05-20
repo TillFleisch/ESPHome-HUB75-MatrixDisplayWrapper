@@ -32,6 +32,9 @@ namespace esphome
       if (user_defined_clock_phase_)
         mxconfig.clkphase = clock_phase_;
 
+      // The min refresh rate correlates with the update frequency of the component
+      mxconfig.min_refresh_rate = 1000 / update_interval_;
+
       mxconfig.double_buff = true;
 
       // Display Setup
@@ -114,6 +117,8 @@ namespace esphome
       ESP_LOGCONFIG(TAG, "Latch blanking: %i", dma_display_->getCfg().latch_blanking);
 
       ESP_LOGCONFIG(TAG, "Clock Phase: %s", dma_display_->getCfg().clkphase ? "true" : "false");
+
+      ESP_LOGCONFIG(TAG, "Min refresh rate: %i", dma_display_->getCfg().min_refresh_rate);
     }
 
     void MatrixDisplay::set_state(bool state)

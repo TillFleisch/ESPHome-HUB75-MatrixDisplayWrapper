@@ -2,7 +2,7 @@ import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import display
 from esphome import pins
-from esphome.const import (CONF_ID, CONF_LAMBDA, CONF_PAGES, CONF_HEIGHT,
+from esphome.const import (CONF_ID, CONF_LAMBDA, CONF_HEIGHT,
                            CONF_WIDTH, CONF_UPDATE_INTERVAL)
 
 AUTO_LOAD = ['switch', 'matrix_display_switch',
