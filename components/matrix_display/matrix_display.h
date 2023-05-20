@@ -9,20 +9,6 @@
 
 #include "ESP32-HUB75-MatrixPanel-I2S-DMA.h"
 
-#define DEFAULT_BRIGHTNESS 63
-
-#define R2_PIN 33 // 14
-#define G2_PIN 32 // 12
-#define B2_PIN 18 // 35
-#define A_PIN 23
-#define B_PIN 19
-#define C_PIN 5
-#define D_PIN 17
-#define E_PIN -1 // required for 1/32 scan panels, like 64x64px. Any available pin would do, i.e. IO32
-#define LAT_PIN 4
-#define OE_PIN 15
-#define CLK_PIN 16
-
 namespace esphome
 {
   namespace matrix_display
@@ -129,6 +115,13 @@ namespace esphome
             static_cast<int8_t>(CLK_pin->get_pin())};
       }
 
+      /**
+       * Sets the driver which will be used before display instantiation.
+       *
+       * @param driver Driver enum
+       */
+      void set_driver(HUB75_I2S_CFG::shift_driver driver) { driver_ = driver; };
+
       display::DisplayType get_display_type() override { return display::DisplayType::DISPLAY_TYPE_COLOR; }
 
       /**
@@ -186,6 +179,9 @@ namespace esphome
 
       /// @brief pin configuration
       HUB75_I2S_CFG::i2s_pins pins_;
+
+      /// @brief driver used for the matrix display
+      HUB75_I2S_CFG::shift_driver driver_;
 
       /// @brief of each panel
       int panel_width_ = 64;

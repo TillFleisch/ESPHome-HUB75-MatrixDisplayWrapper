@@ -21,8 +21,7 @@ namespace esphome
           chain_length_, // Chain length
           pins_);
 
-      // mxconfig.clkphase = false;
-      mxconfig.driver = HUB75_I2S_CFG::FM6124;
+      mxconfig.driver = driver_;
 
       mxconfig.double_buff = true;
 
@@ -60,6 +59,28 @@ namespace esphome
       ESP_LOGCONFIG(TAG, "Pins: R1:%i, G1:%i, B1:%i, R2:%i, G2:%i, B2:%i", pins_.r1, pins_.g1, pins_.b1, pins_.r2, pins_.g2, pins_.b2);
       ESP_LOGCONFIG(TAG, "Pins: A:%i, B:%i, C:%i, D:%i, E:%i", pins_.a, pins_.b, pins_.c, pins_.d, pins_.e);
       ESP_LOGCONFIG(TAG, "Pins: LAT:%i, OE:%i, CLK:%i", pins_.lat, pins_.oe, pins_.b1, pins_.clk);
+
+      switch (driver_)
+      {
+      case HUB75_I2S_CFG::shift_driver::SHIFTREG:
+        ESP_LOGCONFIG(TAG, "Driver: SHIFTREG");
+        break;
+      case HUB75_I2S_CFG::shift_driver::FM6124:
+        ESP_LOGCONFIG(TAG, "Driver: FM6124");
+        break;
+      case HUB75_I2S_CFG::shift_driver::FM6126A:
+        ESP_LOGCONFIG(TAG, "Driver: FM6126A");
+        break;
+      case HUB75_I2S_CFG::shift_driver::ICN2038S:
+        ESP_LOGCONFIG(TAG, "Driver: ICN2038S");
+        break;
+      case HUB75_I2S_CFG::shift_driver::MBI5124:
+        ESP_LOGCONFIG(TAG, "Driver: MBI5124");
+        break;
+      case HUB75_I2S_CFG::shift_driver::SM5266P:
+        ESP_LOGCONFIG(TAG, "Driver: SM5266P");
+        break;
+      }
     }
 
     void MatrixDisplay::set_state(bool state)
