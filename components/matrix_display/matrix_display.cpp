@@ -21,7 +21,10 @@ namespace esphome
           chain_length_, // Chain length
           pins_);
 
-      mxconfig.driver = driver_;
+      if (user_defined_driver_)
+        mxconfig.driver = driver_;
+      if (user_defined_i2sspeed)
+        mxconfig.i2sspeed = i2sspeed_;
 
       mxconfig.double_buff = true;
 
@@ -56,11 +59,14 @@ namespace esphome
     void MatrixDisplay::dump_config()
     {
       ESP_LOGCONFIG(TAG, "MatrixDisplay:");
+
+      // Log pin settings
       ESP_LOGCONFIG(TAG, "Pins: R1:%i, G1:%i, B1:%i, R2:%i, G2:%i, B2:%i", pins_.r1, pins_.g1, pins_.b1, pins_.r2, pins_.g2, pins_.b2);
       ESP_LOGCONFIG(TAG, "Pins: A:%i, B:%i, C:%i, D:%i, E:%i", pins_.a, pins_.b, pins_.c, pins_.d, pins_.e);
       ESP_LOGCONFIG(TAG, "Pins: LAT:%i, OE:%i, CLK:%i", pins_.lat, pins_.oe, pins_.b1, pins_.clk);
 
-      switch (driver_)
+      // Log driver settings
+      switch (dma_display_->getCfg().driver)
       {
       case HUB75_I2S_CFG::shift_driver::SHIFTREG:
         ESP_LOGCONFIG(TAG, "Driver: SHIFTREG");
@@ -79,6 +85,23 @@ namespace esphome
         break;
       case HUB75_I2S_CFG::shift_driver::SM5266P:
         ESP_LOGCONFIG(TAG, "Driver: SM5266P");
+        break;
+      }
+
+      // Log i2speed
+      switch (dma_display_->getCfg().i2sspeed)
+      {
+      case HUB75_I2S_CFG::clk_speed::HZ_8M:
+        ESP_LOGCONFIG(TAG, "Driver: HZ_8M");
+        break;
+      case HUB75_I2S_CFG::clk_speed::HZ_10M:
+        ESP_LOGCONFIG(TAG, "Driver: HZ_10M");
+        break;
+      case HUB75_I2S_CFG::clk_speed::HZ_15M:
+        ESP_LOGCONFIG(TAG, "Driver: HZ_15M");
+        break;
+      case HUB75_I2S_CFG::clk_speed::HZ_20M:
+        ESP_LOGCONFIG(TAG, "Driver: HZ_20M");
         break;
       }
     }

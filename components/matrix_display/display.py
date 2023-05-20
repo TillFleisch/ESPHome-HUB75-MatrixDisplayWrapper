@@ -29,6 +29,7 @@ OE_PIN = 'OE_pin'
 CLK_PIN = 'CLK_pin'
 
 DRIVER = 'driver'
+I2SSPEED = 'i2sspeed'
 
 matrix_display_ns = cg.esphome_ns.namespace("matrix_display")
 MatrixDisplay = matrix_display_ns.class_(
@@ -42,6 +43,14 @@ DRIVERS = {
     "ICN2038S": shift_driver.ICN2038S,
     "MBI5124": shift_driver.MBI5124,
     "SM5266": shift_driver.SM5266P
+}
+
+clk_speed = cg.global_ns.namespace("HUB75_I2S_CFG").enum("clk_speed")
+CLOCK_SPEEDS = {
+    "HZ_8M": clk_speed.HZ_8M,
+    "HZ_10M": clk_speed.HZ_10M,
+    "HZ_15M": clk_speed.HZ_15M,
+    "HZ_20M": clk_speed.HZ_20M
 }
 
 CONFIG_SCHEMA = (
@@ -73,8 +82,12 @@ CONFIG_SCHEMA = (
             cv.Optional(OE_PIN, default=15): pins.gpio_output_pin_schema,
             cv.Optional(CLK_PIN, default=16): pins.gpio_output_pin_schema,
 
-            cv.Optional(DRIVER, default="SHIFTREG"): cv.enum(
+            cv.Optional(DRIVER): cv.enum(
                 DRIVERS, upper=True, space="_"
+            ),
+
+            cv.Optional(I2SSPEED): cv.enum(
+                CLOCK_SPEEDS, upper=True, space="_"
             ),
         }
     )
@@ -112,7 +125,11 @@ async def to_code(config):
     cg.add(var.set_pins(R1_pin, G1_pin, B1_pin, R2_pin, G2_pin, B2_pin,
            A_pin, B_pin, C_pin, D_pin, E_pin, LAT_pin, OE_pin, CLK_pin))
 
-    cg.add(var.set_driver(config[DRIVER]))
+    if DRIVER in config:
+        cg.add(var.set_driver(config[DRIVER]))
+
+    if I2SSPEED in config:
+        cg.add(var.set_i2sspeed(config[I2SSPEED]))
 
     await cg.register_component(var, config)
     await display.register_display(var, config)

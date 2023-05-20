@@ -120,7 +120,20 @@ namespace esphome
        *
        * @param driver Driver enum
        */
-      void set_driver(HUB75_I2S_CFG::shift_driver driver) { driver_ = driver; };
+      void set_driver(HUB75_I2S_CFG::shift_driver driver)
+      {
+        user_defined_driver_ = true;
+        driver_ = driver;
+      };
+
+      /**
+       * Sets the clock speed
+       */
+      void set_i2sspeed(HUB75_I2S_CFG::clk_speed speed)
+      {
+        user_defined_i2sspeed = true;
+        i2sspeed_ = speed;
+      };
 
       display::DisplayType get_display_type() override { return display::DisplayType::DISPLAY_TYPE_COLOR; }
 
@@ -180,8 +193,17 @@ namespace esphome
       /// @brief pin configuration
       HUB75_I2S_CFG::i2s_pins pins_;
 
+      /// @brief determines if the user has defined a driver enum
+      bool user_defined_driver_ = false;
+
       /// @brief driver used for the matrix display
       HUB75_I2S_CFG::shift_driver driver_;
+
+      /// @brief determines if the user has defined a i2sspeed enum
+      bool user_defined_i2sspeed = false;
+
+      /// @brief i2s clock speed
+      HUB75_I2S_CFG::clk_speed i2sspeed_;
 
       /// @brief of each panel
       int panel_width_ = 64;
