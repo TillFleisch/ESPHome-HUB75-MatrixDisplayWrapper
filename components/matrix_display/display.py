@@ -72,7 +72,7 @@ CONFIG_SCHEMA = (
             cv.Optional(B1_PIN, default=27): pins.gpio_output_pin_schema,
             cv.Optional(R2_PIN, default=14): pins.gpio_output_pin_schema,
             cv.Optional(G2_PIN, default=12): pins.gpio_output_pin_schema,
-            cv.Optional(B2_PIN, default=23): pins.gpio_output_pin_schema,
+            cv.Optional(B2_PIN, default=13): pins.gpio_output_pin_schema,
 
             cv.Optional(A_PIN, default=23): pins.gpio_output_pin_schema,
             cv.Optional(B_PIN, default=19): pins.gpio_output_pin_schema,
