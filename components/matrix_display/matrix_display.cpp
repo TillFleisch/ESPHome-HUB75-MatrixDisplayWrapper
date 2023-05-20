@@ -26,6 +26,9 @@ namespace esphome
       if (user_defined_i2sspeed)
         mxconfig.i2sspeed = i2sspeed_;
 
+      if (latch_blanking_ >= 0)
+        mxconfig.latch_blanking = latch_blanking_;
+
       mxconfig.double_buff = true;
 
       // Display Setup
@@ -92,18 +95,20 @@ namespace esphome
       switch (dma_display_->getCfg().i2sspeed)
       {
       case HUB75_I2S_CFG::clk_speed::HZ_8M:
-        ESP_LOGCONFIG(TAG, "Driver: HZ_8M");
+        ESP_LOGCONFIG(TAG, "I2SSpeed: HZ_8M");
         break;
       case HUB75_I2S_CFG::clk_speed::HZ_10M:
-        ESP_LOGCONFIG(TAG, "Driver: HZ_10M");
+        ESP_LOGCONFIG(TAG, "I2SSpeed: HZ_10M");
         break;
       case HUB75_I2S_CFG::clk_speed::HZ_15M:
-        ESP_LOGCONFIG(TAG, "Driver: HZ_15M");
+        ESP_LOGCONFIG(TAG, "I2SSpeed: HZ_15M");
         break;
       case HUB75_I2S_CFG::clk_speed::HZ_20M:
-        ESP_LOGCONFIG(TAG, "Driver: HZ_20M");
+        ESP_LOGCONFIG(TAG, "I2SSpeed: HZ_20M");
         break;
       }
+
+      ESP_LOGCONFIG(TAG, "Latch blanking: %i", dma_display_->getCfg().latch_blanking);
     }
 
     void MatrixDisplay::set_state(bool state)

@@ -128,12 +128,21 @@ namespace esphome
 
       /**
        * Sets the clock speed
+       *
+       * @param speed i2s clock speed
        */
       void set_i2sspeed(HUB75_I2S_CFG::clk_speed speed)
       {
         user_defined_i2sspeed = true;
         i2sspeed_ = speed;
       };
+
+      /**
+       * Sets for how many cycles OE is blanked before and after LAT changes.
+       *
+       * @param latch_blanking cycle count
+       */
+      void set_latch_blanking(int latch_blanking) { latch_blanking_ = latch_blanking; };
 
       display::DisplayType get_display_type() override { return display::DisplayType::DISPLAY_TYPE_COLOR; }
 
@@ -204,6 +213,9 @@ namespace esphome
 
       /// @brief i2s clock speed
       HUB75_I2S_CFG::clk_speed i2sspeed_;
+
+      /// @brief user defined latch blanking value
+      int latch_blanking_ = -1;
 
       /// @brief of each panel
       int panel_width_ = 64;

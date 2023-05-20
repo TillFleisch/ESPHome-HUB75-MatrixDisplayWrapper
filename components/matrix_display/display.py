@@ -30,6 +30,7 @@ CLK_PIN = 'CLK_pin'
 
 DRIVER = 'driver'
 I2SSPEED = 'i2sspeed'
+LATCH_BLANKING = 'latch_blanking'
 
 matrix_display_ns = cg.esphome_ns.namespace("matrix_display")
 MatrixDisplay = matrix_display_ns.class_(
@@ -89,6 +90,8 @@ CONFIG_SCHEMA = (
             cv.Optional(I2SSPEED): cv.enum(
                 CLOCK_SPEEDS, upper=True, space="_"
             ),
+
+            cv.Optional(LATCH_BLANKING): cv.positive_int,
         }
     )
 )
@@ -130,6 +133,9 @@ async def to_code(config):
 
     if I2SSPEED in config:
         cg.add(var.set_i2sspeed(config[I2SSPEED]))
+
+    if LATCH_BLANKING in config:
+        cg.add(var.set_latch_blanking(config[LATCH_BLANKING]))
 
     await cg.register_component(var, config)
     await display.register_display(var, config)
