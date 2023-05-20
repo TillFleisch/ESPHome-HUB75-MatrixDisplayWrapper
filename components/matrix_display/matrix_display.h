@@ -133,7 +133,7 @@ namespace esphome
        */
       void set_i2sspeed(HUB75_I2S_CFG::clk_speed speed)
       {
-        user_defined_i2sspeed = true;
+        user_defined_i2sspeed_ = true;
         i2sspeed_ = speed;
       };
 
@@ -143,6 +143,17 @@ namespace esphome
        * @param latch_blanking cycle count
        */
       void set_latch_blanking(int latch_blanking) { latch_blanking_ = latch_blanking; };
+
+      /**
+       * Sets the user defined clock phase and flag.
+       *
+       * @param clock_phase clock phase value
+       */
+      void set_clock_phase(bool clock_phase)
+      {
+        user_defined_clock_phase_ = true;
+        clock_phase_ = clock_phase;
+      }
 
       display::DisplayType get_display_type() override { return display::DisplayType::DISPLAY_TYPE_COLOR; }
 
@@ -209,13 +220,19 @@ namespace esphome
       HUB75_I2S_CFG::shift_driver driver_;
 
       /// @brief determines if the user has defined a i2sspeed enum
-      bool user_defined_i2sspeed = false;
+      bool user_defined_i2sspeed_ = false;
 
       /// @brief i2s clock speed
       HUB75_I2S_CFG::clk_speed i2sspeed_;
 
       /// @brief user defined latch blanking value
       int latch_blanking_ = -1;
+
+      /// @brief determines if the user has defined a clock phase
+      bool user_defined_clock_phase_ = false;
+
+      /// @brief user defined clock phase
+      bool clock_phase_;
 
       /// @brief of each panel
       int panel_width_ = 64;

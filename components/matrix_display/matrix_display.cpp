@@ -23,11 +23,14 @@ namespace esphome
 
       if (user_defined_driver_)
         mxconfig.driver = driver_;
-      if (user_defined_i2sspeed)
+      if (user_defined_i2sspeed_)
         mxconfig.i2sspeed = i2sspeed_;
 
       if (latch_blanking_ >= 0)
         mxconfig.latch_blanking = latch_blanking_;
+
+      if (user_defined_clock_phase_)
+        mxconfig.clkphase = clock_phase_;
 
       mxconfig.double_buff = true;
 
@@ -109,6 +112,8 @@ namespace esphome
       }
 
       ESP_LOGCONFIG(TAG, "Latch blanking: %i", dma_display_->getCfg().latch_blanking);
+
+      ESP_LOGCONFIG(TAG, "Clock Phase: %s", dma_display_->getCfg().clkphase ? "true" : "false");
     }
 
     void MatrixDisplay::set_state(bool state)
