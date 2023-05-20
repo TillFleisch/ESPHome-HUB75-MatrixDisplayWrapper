@@ -1,0 +1,44 @@
+esphome:
+  name: matrix-display
+  friendly_name: Matrix Display
+  platformio_options:
+    lib_deps:
+      - SPI
+      - Wire
+      - Adafruit BusIO
+      - adafruit/Adafruit GFX Library
+      - https://github.com/TillFleisch/ESP32-HUB75-MatrixPanel-DMA#optional_logging
+
+external_components:
+  - source: github://TillFleisch/ESPHome-HUB75-MatrixDisplayWrapper@main
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+font:
+  # gfonts://family[@weight]
+  - file: "gfonts://Roboto"
+    id: roboto
+    size: 10
+
+display:
+  - platform: matrix_display
+    id: matrix
+    width: 64
+    height: 32
+
+    lambda: |-
+      it.print(0, 0, id(roboto), "Hello World!");
+
+switch:
+  - platform: matrix_display_switch
+    matrix_id: matrix
+    name: "Power"
+    id: power
+
+number:
+  - platform: matrix_display_brightness
+    matrix_id: matrix
+    name: "Brightness"

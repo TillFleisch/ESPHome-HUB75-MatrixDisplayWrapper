@@ -1,0 +1,13 @@
+display:
+  - platform: matrix_display
+    id: matrix
+    width: 64
+    height: 32
+    R2_pin: 33
+    G2_pin: 32
+    B2_pin: 18
+    driver: FM6124
+    i2sspeed: HZ_20M
+    latch_blanking: 4
+    clock_phase: false
+    update_interval: 8 ms
