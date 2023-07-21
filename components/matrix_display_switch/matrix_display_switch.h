@@ -16,6 +16,7 @@ namespace esphome::matrix_display::matrix_display_switch
          */
         void write_state(bool state);
 
+        void setup() override;
         void dump_config() override;
 
         /**
