@@ -2,6 +2,13 @@
 
 namespace esphome::matrix_display::matrix_display_switch
 {
+    void MatrixDisplaySwitch::setup()
+    {
+        auto initial_state = this->get_initial_state_with_restore_mode().value_or(false);
+        ESP_LOGD(TAG, "Setting up matrix display switch with initial state: %i", initial_state);
+        write_state(initial_state);
+    }
+
     void MatrixDisplaySwitch::write_state(bool state)
     {
         // Update display status and forwad state to all registered power switches.
