@@ -6,6 +6,16 @@ This ESPHome component wraps the library into an ESPHome [display component](htt
 This wrapper currently only supports horizontally chained panels.
 [Vertically aligned panels and VirtualDisplays](https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-DMA/tree/master/examples/ChainedPanels) are currently not supported.
 
+### My Pixel Art display
+  - 32x64 Pixel P5 Panel
+  - [CAD Files and more print info](https://www.printables.com/model/600039-pixel-art-matrix-display)
+  - retrofit ambient light sensor for adaptive brightness control 
+
+![Pixel Matrix Display](images/pixel_matrix_display_front.gif)
+Backside|Raw panel
+:-:|:-:
+<img src="images/pixel_matrix_display_back.jpg" alt="Backside" width="250"/>|  <img src="images/pixel_matrix_panel_raw.gif" alt="Raw panel" width="250"/>
+
 # Configuration variables
 
 The custom component can be added to a yaml configuration by adding the external component like this:
