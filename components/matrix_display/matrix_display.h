@@ -26,8 +26,7 @@ namespace esphome
       static void set_reference(MatrixDisplayBrightness *brightness, MatrixDisplay *display);
     }
 
-    class MatrixDisplay : public PollingComponent,
-                          public display::DisplayBuffer
+    class MatrixDisplay : public display::DisplayBuffer
     {
     public:
       void setup() override;

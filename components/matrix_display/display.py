@@ -142,7 +142,6 @@ async def to_code(config):
     if CLOCK_PHASE in config:
         cg.add(var.set_clock_phase(config[CLOCK_PHASE]))
 
-    await cg.register_component(var, config)
     await display.register_display(var, config)
 
     if CONF_LAMBDA in config:
