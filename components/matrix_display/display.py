@@ -36,6 +36,8 @@ I2SSPEED = "i2sspeed"
 LATCH_BLANKING = "latch_blanking"
 CLOCK_PHASE = "clock_phase"
 
+USE_CUSTOM_LIBRARY = "use_custom_library"
+
 matrix_display_ns = cg.esphome_ns.namespace("matrix_display")
 MatrixDisplay = matrix_display_ns.class_(
     "MatrixDisplay", cg.PollingComponent, display.DisplayBuffer
@@ -64,6 +66,7 @@ CONFIG_SCHEMA = display.FULL_DISPLAY_SCHEMA.extend(
         cv.GenerateID(): cv.declare_id(MatrixDisplay),
         cv.Required(CONF_WIDTH): cv.positive_int,
         cv.Required(CONF_HEIGHT): cv.positive_int,
+        cv.Optional(USE_CUSTOM_LIBRARY, default=False): cv.boolean,
         cv.Optional(CHAIN_LENGTH, default=1): cv.positive_int,
         cv.Optional(BRIGHTNESS, default=128): cv.int_range(min=0, max=255),
         cv.Optional(
@@ -92,6 +95,16 @@ CONFIG_SCHEMA = display.FULL_DISPLAY_SCHEMA.extend(
 
 
 async def to_code(config):
+    if not config[USE_CUSTOM_LIBRARY]:
+        cg.add_library("SPI", None)
+        cg.add_library("Wire", None)
+        cg.add_library("Adafruit BusIO", None)
+        cg.add_library("adafruit/Adafruit GFX Library", None)
+        cg.add_library(
+            "https://github.com/TillFleisch/ESP32-HUB75-MatrixPanel-DMA#optional_logging",
+            None,
+        )
+
     var = cg.new_Pvariable(config[CONF_ID])
     cg.add(var.set_panel_width(config[CONF_WIDTH]))
     cg.add(var.set_panel_height(config[CONF_HEIGHT]))

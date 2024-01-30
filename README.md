@@ -87,6 +87,7 @@ The additional settings are used to set the configuration variables for the wrap
 - **i2sspeed**(**Optional**): I2SSpeed used for configuring the display. Select one of `HZ_8M`, `HZ_10M`, `HZ_15M`, `HZ_20M`.
 - **latch_blanking**(**Optional**, int): Latch blanking value used for configuring the display.
 - **clock_phase**(**Optional**, boolean): Clock phase value used for configuring the display.
+- **use_custom_library**(**Optional**, boolean): If set to `true` a custom library must be defined using `platformio_options:lib_deps`. Defaults to `false`. See [this example](custom_library.yaml) for more details.
 
 - All other options from [Display](https://esphome.io/components/display/index.html)
 
