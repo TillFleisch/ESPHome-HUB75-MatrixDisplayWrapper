@@ -7,9 +7,10 @@ This wrapper currently only supports horizontally chained panels.
 [Vertically aligned panels and VirtualDisplays](https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-DMA/tree/master/examples/ChainedPanels) are currently not supported.
 
 ### My Pixel Art display
-  - 32x64 Pixel P5 Panel
-  - [CAD Files and more print info](https://www.printables.com/model/600039-pixel-art-matrix-display)
-  - retrofit ambient light sensor for adaptive brightness control 
+
+- 32x64 Pixel P5 Panel
+- [CAD Files and more print info](https://www.printables.com/model/600039-pixel-art-matrix-display)
+- retrofit ambient light sensor for adaptive brightness control
 
 ![Pixel Matrix Display](images/pixel_matrix_display_front.gif)
 Backside|Raw panel
