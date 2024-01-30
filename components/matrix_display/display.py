@@ -10,7 +10,6 @@ from esphome.const import (
     CONF_WIDTH,
 )
 
-AUTO_LOAD = ["number", "matrix_display_brightness"]
 MATRIX_ID = "matrix_id"
 CHAIN_LENGTH = "chain_length"
 BRIGHTNESS = "brightness"

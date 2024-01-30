@@ -100,7 +100,7 @@ This switch can be used to turn the display on or off. In it's off state the dis
 - **matrix_id**(**Required**, string): The matrix display entity to which this power switch belongs.
 - All other options from [Switch](https://esphome.io/components/switch/index.html#config-switch)
 
-## Matrix Display Brightness
+## Brightness
 
 This number entity can be used to set the display brightness. In combination with a brightness sensor this can used to adaptively change matrix displays brightness.
 

@@ -48,7 +48,7 @@ switch:
     restore_mode: RESTORE_DEFAULT_OFF
 
 number:
-  - platform: matrix_display_brightness
+  - platform: matrix_display
     id: brightness
     matrix_id: matrix
     name: "Brightness"

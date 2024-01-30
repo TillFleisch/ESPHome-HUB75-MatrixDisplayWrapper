@@ -2,7 +2,7 @@
 
 #include "esphome/core/component.h"
 #include "esphome/components/number/number.h"
-#include "../matrix_display/matrix_display.h"
+#include "../matrix_display.h"
 
 namespace esphome::matrix_display::matrix_display_brightness
 {

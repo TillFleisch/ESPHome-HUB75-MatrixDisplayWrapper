@@ -3,9 +3,7 @@ import esphome.config_validation as cv
 from esphome.components import number
 from esphome.const import CONF_MODE
 
-from ..matrix_display.display import MATRIX_ID, MatrixDisplay
-
-AUTO_LOAD = ["number"]
+from ..display import MATRIX_ID, MatrixDisplay
 
 matrix_display_brightness_ns = cg.esphome_ns.namespace(
     "matrix_display::matrix_display_brightness"
