@@ -2,7 +2,7 @@
 
 #include "esphome/core/component.h"
 #include "esphome/components/switch/switch.h"
-#include "../matrix_display/matrix_display.h"
+#include "../matrix_display.h"
 
 namespace esphome::matrix_display::matrix_display_switch
 {

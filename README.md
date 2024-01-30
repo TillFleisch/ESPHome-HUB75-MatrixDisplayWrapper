@@ -93,7 +93,7 @@ The additional settings are used to set the configuration variables for the wrap
 Note that the default pin configurations are the ones mentioned in the [ESP32-HUB75-MatrixPanel-DMA](https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-DMA) library. Some of these pins are used as strapping pins on ESPs. It is recommended to not use these.
 My panel and the ESP do not work unless I change the R2, G2 and B2 pins.
 
-## Matrix Display Switch
+## Switch
 
 This switch can be used to turn the display on or off. In it's off state the display is showing a blank screen.
 

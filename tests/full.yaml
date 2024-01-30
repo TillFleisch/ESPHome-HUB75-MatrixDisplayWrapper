@@ -41,7 +41,7 @@ display:
     update_interval: 8 ms
 
 switch:
-  - platform: matrix_display_switch
+  - platform: matrix_display
     matrix_id: matrix
     name: "Power"
     id: power
