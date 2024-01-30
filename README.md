@@ -1,4 +1,4 @@
-# ESP32-HUB75-MatrixPanel-I2S-DMA ESPHome wrapper
+# ESP32-HUB75-MatrixPanel-I2S-DMA ESPHome wrapper [![CI](https://github.com/TillFleisch/ESPHome-HUB75-MatrixDisplayWrapper/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/TillFleisch/ESPHome-HUB75-MatrixDisplayWrapper/actions/workflows/ci.yaml)
 
 This custom component is a [ESPHome](https://esphome.io/) wrapper for the [ESP32-HUB75-MatrixPanel-DMA](https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-DMA#master) library. For more details regarding wiring, choosing the correct parameters and more complex configurations please refer to the above linked documentation.
 This ESPHome component wraps the library into an ESPHome [display component](https://esphome.io/components/display/index.html) which can be used to show text, sensor values and images.
@@ -7,9 +7,10 @@ This wrapper currently only supports horizontally chained panels.
 [Vertically aligned panels and VirtualDisplays](https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-DMA/tree/master/examples/ChainedPanels) are currently not supported.
 
 ### My Pixel Art display
-  - 32x64 Pixel P5 Panel
-  - [CAD Files and more print info](https://www.printables.com/model/600039-pixel-art-matrix-display)
-  - retrofit ambient light sensor for adaptive brightness control 
+
+- 32x64 Pixel P5 Panel
+- [CAD Files and more print info](https://www.printables.com/model/600039-pixel-art-matrix-display)
+- retrofit ambient light sensor for adaptive brightness control
 
 ![Pixel Matrix Display](images/pixel_matrix_display_front.gif)
 Backside|Raw panel

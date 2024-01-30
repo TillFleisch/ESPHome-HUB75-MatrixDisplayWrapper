@@ -1,0 +1,33 @@
+esphome:
+  name: matrix-display
+  platformio_options:
+    lib_deps:
+      - SPI
+      - Wire
+      - Adafruit BusIO
+      - adafruit/Adafruit GFX Library
+      - https://github.com/TillFleisch/ESP32-HUB75-MatrixPanel-DMA#optional_logging
+
+esp32:
+  board: esp32dev
+
+external_components:
+  - source:
+      type: local
+      path: ../components
+
+logger:
+  baud_rate: 0
+
+uart:
+  id: bus
+  tx_pin: TX
+  rx_pin: RX
+  baud_rate: 19200
+  stop_bits: 2
+
+display:
+  - platform: matrix_display
+    id: matrix
+    width: 64
+    height: 32
