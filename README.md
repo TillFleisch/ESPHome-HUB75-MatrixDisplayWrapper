@@ -51,7 +51,7 @@ A minimum working example for setting up the display. A more complex configurati
 
 ```yaml
 display:
-  - platform: matrix_display
+  - platform: hub75_matrix_display
     id: matrix
     width: 64
     height: 32
@@ -87,20 +87,21 @@ The additional settings are used to set the configuration variables for the wrap
 - **i2sspeed**(**Optional**): I2SSpeed used for configuring the display. Select one of `HZ_8M`, `HZ_10M`, `HZ_15M`, `HZ_20M`.
 - **latch_blanking**(**Optional**, int): Latch blanking value used for configuring the display.
 - **clock_phase**(**Optional**, boolean): Clock phase value used for configuring the display.
+- **use_custom_library**(**Optional**, boolean): If set to `true` a custom library must be defined using `platformio_options:lib_deps`. Defaults to `false`. See [this example](custom_library.yaml) for more details.
 
 - All other options from [Display](https://esphome.io/components/display/index.html)
 
 Note that the default pin configurations are the ones mentioned in the [ESP32-HUB75-MatrixPanel-DMA](https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-DMA) library. Some of these pins are used as strapping pins on ESPs. It is recommended to not use these.
 My panel and the ESP do not work unless I change the R2, G2 and B2 pins.
 
-## Matrix Display Switch
+## Switch
 
 This switch can be used to turn the display on or off. In it's off state the display is showing a blank screen.
 
 - **matrix_id**(**Required**, string): The matrix display entity to which this power switch belongs.
 - All other options from [Switch](https://esphome.io/components/switch/index.html#config-switch)
 
-## Matrix Display Brightness
+## Brightness
 
 This number entity can be used to set the display brightness. In combination with a brightness sensor this can used to adaptively change matrix displays brightness.
 

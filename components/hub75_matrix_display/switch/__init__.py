@@ -3,9 +3,7 @@ import esphome.config_validation as cv
 from esphome.components import switch
 from esphome.const import CONF_ID
 
-from ..matrix_display.display import MATRIX_ID, MatrixDisplay
-
-AUTO_LOAD = ["switch"]
+from ..display import MATRIX_ID, MatrixDisplay
 
 matrix_display_switch_ns = cg.esphome_ns.namespace(
     "matrix_display::matrix_display_switch"
