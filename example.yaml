@@ -17,7 +17,7 @@ font:
     size: 10
 
 display:
-  - platform: matrix_display
+  - platform: hub75_matrix_display
     id: matrix
     width: 64
     height: 32
@@ -26,12 +26,12 @@ display:
       it.print(0, 0, id(roboto), "Hello World!");
 
 switch:
-  - platform: matrix_display_switch
+  - platform: hub75_matrix_display
     matrix_id: matrix
     name: "Power"
     id: power
 
 number:
-  - platform: matrix_display_brightness
+  - platform: hub75_matrix_display
     matrix_id: matrix
     name: "Brightness"

@@ -20,7 +20,7 @@ uart:
   stop_bits: 2
 
 display:
-  - platform: matrix_display
+  - platform: hub75_matrix_display
     id: matrix
     width: 64
     height: 32
@@ -34,14 +34,14 @@ display:
     update_interval: 8 ms
 
 switch:
-  - platform: matrix_display
+  - platform: hub75_matrix_display
     matrix_id: matrix
     name: "Power"
     id: power
     restore_mode: RESTORE_DEFAULT_OFF
 
 number:
-  - platform: matrix_display
+  - platform: hub75_matrix_display
     id: brightness
     matrix_id: matrix
     name: "Brightness"

@@ -51,7 +51,7 @@ A minimum working example for setting up the display. A more complex configurati
 
 ```yaml
 display:
-  - platform: matrix_display
+  - platform: hub75_matrix_display
     id: matrix
     width: 64
     height: 32
