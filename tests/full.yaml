@@ -9,16 +9,6 @@ external_components:
       type: local
       path: ../components
 
-logger:
-  baud_rate: 0
-
-uart:
-  id: bus
-  tx_pin: TX
-  rx_pin: RX
-  baud_rate: 19200
-  stop_bits: 2
-
 display:
   - platform: hub75_matrix_display
     id: matrix
