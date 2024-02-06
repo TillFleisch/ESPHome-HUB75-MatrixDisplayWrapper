@@ -10,6 +10,8 @@ from esphome.const import (
     CONF_WIDTH,
 )
 
+DEPENDENCIES = ["esp32"]
+
 MATRIX_ID = "matrix_id"
 CHAIN_LENGTH = "chain_length"
 BRIGHTNESS = "brightness"

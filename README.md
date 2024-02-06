@@ -25,13 +25,6 @@ The custom component can be added to a yaml configuration by adding the external
 esphome:
   name: matrix-display
   friendly_name: Matrix Display
-  platformio_options:
-    lib_deps:
-      - SPI
-      - Wire
-      - Adafruit BusIO
-      - adafruit/Adafruit GFX Library
-      - https://github.com/TillFleisch/ESP32-HUB75-MatrixPanel-DMA#optional_logging
 
 external_components:
   - source: github://TillFleisch/ESPHome-HUB75-MatrixDisplayWrapper@main
@@ -42,7 +35,7 @@ esp32:
     type: arduino
 ```
 
-Note that the library dependencies are required and that the component will only compile on ESP32-based devices.
+Note that the component will only compile on ESP32-based devices.
 An example configuration can be found [here](example.yaml).
 
 ## Matrix Display
