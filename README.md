@@ -1,10 +1,10 @@
 # ESP32-HUB75-MatrixPanel-I2S-DMA ESPHome wrapper [![CI](https://github.com/TillFleisch/ESPHome-HUB75-MatrixDisplayWrapper/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/TillFleisch/ESPHome-HUB75-MatrixDisplayWrapper/actions/workflows/ci.yaml)
 
-This custom component is a [ESPHome](https://esphome.io/) wrapper for the [ESP32-HUB75-MatrixPanel-DMA](https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-DMA#master) library. For more details regarding wiring, choosing the correct parameters and more complex configurations please refer to the above linked documentation.
+This custom component is a [ESPHome](https://esphome.io/) wrapper for the [ESP32-HUB75-MatrixPanel-DMA](https://github.com/mrcodetastic/ESP32-HUB75-MatrixPanel-DMA#master) library. For more details regarding wiring, choosing the correct parameters and more complex configurations please refer to the above linked documentation.
 This ESPHome component wraps the library into an ESPHome [display component](https://esphome.io/components/display/index.html) which can be used to show text, sensor values and images.
 
 This wrapper currently only supports horizontally chained panels.
-[Vertically aligned panels and VirtualDisplays](https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-DMA/tree/master/examples/ChainedPanels) are currently not supported.
+[Vertically aligned panels and VirtualDisplays](https://github.com/mrcodetastic/ESP32-HUB75-MatrixPanel-DMA/tree/master/examples/ChainedPanels) are currently not supported.
 
 ### My Pixel Art display
 
@@ -50,7 +50,7 @@ display:
     height: 32
 ```
 
-The additional settings are used to set the configuration variables for the wrapped display library. For more information on how to use these and their purpose please refer to the library's [documentation](https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-DMA/tree/master) and [examples](https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-DMA/tree/master/examples).
+The additional settings are used to set the configuration variables for the wrapped display library. For more information on how to use these and their purpose please refer to the library's [documentation](https://github.com/mrcodetastic/ESP32-HUB75-MatrixPanel-DMA/tree/master) and [examples](https://github.com/mrcodetastic/ESP32-HUB75-MatrixPanel-DMA/tree/master/examples).
 
 - **id**(**Required**, string): Matrix ID which will be used for entity configuration.
 - **width**(**Required**, int): Width of the individual panels.
@@ -84,7 +84,7 @@ The additional settings are used to set the configuration variables for the wrap
 
 - All other options from [Display](https://esphome.io/components/display/index.html)
 
-Note that the default pin configurations are the ones mentioned in the [ESP32-HUB75-MatrixPanel-DMA](https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-DMA) library. Some of these pins are used as strapping pins on ESPs. It is recommended to not use these.
+Note that the default pin configurations are the ones mentioned in the [ESP32-HUB75-MatrixPanel-DMA](https://github.com/mrcodetastic/ESP32-HUB75-MatrixPanel-DMA) library. Some of these pins are used as strapping pins on ESPs. It is recommended to not use these.
 My panel and the ESP do not work unless I change the R2, G2 and B2 pins.
 
 ## Switch
@@ -103,4 +103,4 @@ This number entity can be used to set the display brightness. In combination wit
 
 # Related work
 
-- Library used in this Project: [ESP32-HUB75-MatrixPanel-DMA](https://github.com/mrfaptastic/ESP32-HUB75-MatrixPanel-DMA) by [@mrfaptastic](https://github.com/mrfaptastic)
+- Library used in this Project: [ESP32-HUB75-MatrixPanel-DMA](https://github.com/mrcodetastic/ESP32-HUB75-MatrixPanel-DMA) by [@mrcodetastic](https://github.com/mrcodetastic)
