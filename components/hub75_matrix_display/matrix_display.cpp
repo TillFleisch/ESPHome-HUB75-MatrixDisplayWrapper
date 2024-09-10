@@ -33,7 +33,7 @@ namespace esphome
                 mxconfig.clkphase = clock_phase_;
 
             if (user_defined_double_buffer_)
-                mxconfig.clkphase = double_buffer_;
+                mxconfig.double_buff = double_buffer_;
             else 
                 mxconfig.double_buff = true;
 
