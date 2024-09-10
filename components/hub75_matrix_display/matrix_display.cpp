@@ -32,10 +32,13 @@ namespace esphome
             if (user_defined_clock_phase_)
                 mxconfig.clkphase = clock_phase_;
 
+            if (user_defined_double_buffer_)
+                mxconfig.clkphase = double_buffer_;
+            else 
+                mxconfig.double_buff = true;
+
             // The min refresh rate correlates with the update frequency of the component
             mxconfig.min_refresh_rate = 1000 / update_interval_;
-
-            mxconfig.double_buff = true;
 
             // Display Setup
             dma_display_ = new MatrixPanel_I2S_DMA(mxconfig);
