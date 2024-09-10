@@ -37,6 +37,7 @@ DRIVER = "driver"
 I2SSPEED = "i2sspeed"
 LATCH_BLANKING = "latch_blanking"
 CLOCK_PHASE = "clock_phase"
+DOUBLE_BUFFER = "double_buffer"
 
 USE_CUSTOM_LIBRARY = "use_custom_library"
 
@@ -92,6 +93,7 @@ CONFIG_SCHEMA = display.FULL_DISPLAY_SCHEMA.extend(
         cv.Optional(I2SSPEED): cv.enum(CLOCK_SPEEDS, upper=True, space="_"),
         cv.Optional(LATCH_BLANKING): cv.positive_int,
         cv.Optional(CLOCK_PHASE): cv.boolean,
+        cv.Optional(DOUBLE_BUFFER): cv.boolean,
     }
 )
 
@@ -164,6 +166,9 @@ async def to_code(config):
 
     if CLOCK_PHASE in config:
         cg.add(var.set_clock_phase(config[CLOCK_PHASE]))
+
+    if DOUBLE_BUFFER in config:
+        cg.add(var.set_double_buffer(config[DOUBLE_BUFFER]))
 
     await display.register_display(var, config)
 
