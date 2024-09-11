@@ -73,7 +73,7 @@ namespace esphome
             else {
                 for(int x = 0; x < dma_display_->width(); x++) {
                     for(int y = 0; y < dma_display_->height(); y++) {
-                        Color color = buffer[get_index(x, y)];
+                        Color color = buffer_[get_index(x, y)];
                         dma_display_->drawPixelRGB888(x, y, color.r, color.g, color.b);    
                     }
                 }

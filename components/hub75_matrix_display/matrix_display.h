@@ -292,7 +292,7 @@ namespace esphome
             /// @brief brightness value number entities belonging to this matrix display
             std::vector<matrix_display_brightness::MatrixDisplayBrightness *> brightness_values_;
 
-            Color *buffer;
+            Color *buffer_;
 
             int get_width_internal() override
             {
