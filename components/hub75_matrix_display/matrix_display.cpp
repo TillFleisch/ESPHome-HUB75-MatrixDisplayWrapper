@@ -49,7 +49,7 @@ namespace esphome
             // Default to off if power switches are present
             set_state(!power_switches_.size());
 
-            buffer = (Color*) calloc((display->width() * display->height()), sizeof(Color));
+            buffer = (Color*) calloc((dma_display_->width() * dma_display_->height()), sizeof(Color));
         }
 
         /**
@@ -66,7 +66,7 @@ namespace esphome
             {
                 dma_display_->clearScreen();
             }
-            if(mxconfig.double_buff) { 
+            if(dma_display_->getCfg().double_buff) { 
                 // Flip buffer to show changes
                 dma_display_->flipDMABuffer();
             }
