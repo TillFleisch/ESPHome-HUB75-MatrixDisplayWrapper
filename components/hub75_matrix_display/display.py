@@ -93,7 +93,7 @@ CONFIG_SCHEMA = display.FULL_DISPLAY_SCHEMA.extend(
         cv.Optional(I2SSPEED): cv.enum(CLOCK_SPEEDS, upper=True, space="_"),
         cv.Optional(LATCH_BLANKING): cv.positive_int,
         cv.Optional(CLOCK_PHASE): cv.boolean,
-        cv.Optional(DOUBLE_BUFFER): cv.boolean,
+        cv.Optional(DOUBLE_BUFFER, default=True): cv.boolean,
     }
 )
 
