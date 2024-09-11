@@ -71,12 +71,12 @@ namespace esphome
                 dma_display_->flipDMABuffer();
             }
             else {
-                dma_display_->clearScreen();
+                // dma_display_->clearScreen();
                 for(int x = 0; x < dma_display_->width(); x++) {
                     for(int y = 0; y < dma_display_->height(); y++) {
                         Color color = buffer_[get_index(x, y)];
                         dma_display_->drawPixelRGB888(x, y, color.r, color.g, color.b);
-                        buffer_[get_index(x, y)] = Color(0, 0, 0);
+                        // buffer_[get_index(x, y)] = Color(0, 0, 0);
                     }
                 }
             }
