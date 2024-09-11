@@ -292,6 +292,8 @@ namespace esphome
             /// @brief brightness value number entities belonging to this matrix display
             std::vector<matrix_display_brightness::MatrixDisplayBrightness *> brightness_values_;
 
+            Color *buffer;
+
             int get_width_internal() override
             {
                 return panel_width_ * chain_length_;
@@ -309,6 +311,8 @@ namespace esphome
              * @param color Color of the pixel
              */
             void draw_absolute_pixel_internal(int x, int y, Color color) override;
+
+            unsigned int get_index(int x, int y);
         };
 
     } // namespace matrix_display

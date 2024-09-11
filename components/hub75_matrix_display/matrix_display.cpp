@@ -48,6 +48,8 @@ namespace esphome
 
             // Default to off if power switches are present
             set_state(!power_switches_.size());
+
+            buffer = (Color*) calloc((display->width() * display->height()), sizeof(Color));
         }
 
         /**
@@ -64,8 +66,13 @@ namespace esphome
             {
                 dma_display_->clearScreen();
             }
-            // Flip buffer to show changes
-            dma_display_->flipDMABuffer();
+            if(mxconfig.double_buff) { 
+                // Flip buffer to show changes
+                dma_display_->flipDMABuffer();
+            }
+            else {
+                // TODO write local buffer to driver
+            }
         }
 
         void MatrixDisplay::dump_config()
@@ -122,6 +129,8 @@ namespace esphome
             ESP_LOGCONFIG(TAG, "Clock Phase: %s", dma_display_->getCfg().clkphase ? "true" : "false");
 
             ESP_LOGCONFIG(TAG, "Min refresh rate: %i", dma_display_->getCfg().min_refresh_rate);
+
+            ESP_LOGCONFIG(TAG, "Double Buffer: %s", dma_display_->getCfg().double_buff ? "true" : "false");
         }
 
         void MatrixDisplay::set_state(bool state)
@@ -142,7 +151,16 @@ namespace esphome
                 return;
 
             // Update pixel value in buffer
-            dma_display_->drawPixelRGB888(x, y, color.r, color.g, color.b);
+            if(mxconfig.double_buff) {
+                dma_display_->drawPixelRGB888(x, y, color.r, color.g, color.b);
+            }
+            else {
+                buffer_[get_index(x,y)] = color;
+            }
+        }
+
+        unsigned int MatrixDisplay::get_index(int x, int y) {
+            return x + (y * this->get_height_internal());
         }
 
         void MatrixDisplay::fill(Color color)
