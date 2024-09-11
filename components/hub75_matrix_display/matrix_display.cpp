@@ -49,7 +49,7 @@ namespace esphome
             // Default to off if power switches are present
             set_state(!power_switches_.size());
 
-            buffer = (Color*) calloc((dma_display_->width() * dma_display_->height()), sizeof(Color));
+            buffer_ = (Color*) calloc((dma_display_->width() * dma_display_->height()), sizeof(Color));
         }
 
         /**
