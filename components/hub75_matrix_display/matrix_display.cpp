@@ -172,13 +172,17 @@ namespace esphome
         void MatrixDisplay::fill(Color color)
         {
             // Wrap fill screen method
-            dma_display_->fillScreenRGB888(color.r, color.g, color.b);
+            if(dma_display_->getCfg().double_buff) {
+                dma_display_->fillScreenRGB888(color.r, color.g, color.b);
+            }
         }
 
         void MatrixDisplay::filled_rectangle(int x1, int y1, int width, int height, Color color)
         {
             // Wrap fill rectangle method
-            dma_display_->fillRect(x1, y1, width, width, color.r, color.g, color.b);
+            if(dma_display_->getCfg().double_buff) {
+                dma_display_->fillRect(x1, y1, width, width, color.r, color.g, color.b);
+            }
         }
 
     } // namespace matrix_display
