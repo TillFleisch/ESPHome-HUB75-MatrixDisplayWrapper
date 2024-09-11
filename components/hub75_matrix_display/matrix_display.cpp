@@ -188,10 +188,14 @@ namespace esphome
         {
             // Wrap fill rectangle method
             if(dma_display_->getCfg().double_buff) {
-                dma_display_->fillRect(x1, y1, width, width, color.r, color.g, color.b);
+                dma_display_->fillRect(x1, y1, width, height, color.r, color.g, color.b);
             }
             else {
-                // TODO write to buffer
+                for(int x = x1; x < width; x++) {
+                    for(int y = y1; y < height; y++) {
+                        buffer_[get_index(x,y)] = color;
+                    }
+                }
             }
         }
 
