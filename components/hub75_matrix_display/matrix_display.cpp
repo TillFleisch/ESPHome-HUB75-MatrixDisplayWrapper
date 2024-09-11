@@ -151,7 +151,7 @@ namespace esphome
                 return;
 
             // Update pixel value in buffer
-            if(mxconfig.double_buff) {
+            if(dma_display_->getCfg().double_buff) {
                 dma_display_->drawPixelRGB888(x, y, color.r, color.g, color.b);
             }
             else {
