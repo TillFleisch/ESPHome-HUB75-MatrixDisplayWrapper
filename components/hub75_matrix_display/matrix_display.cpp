@@ -71,7 +71,6 @@ namespace esphome
                 dma_display_->flipDMABuffer();
             }
             else {
-                // dma_display_->clearScreen();
                 for(int x = 0; x < dma_display_->width(); x++) {
                     for(int y = 0; y < dma_display_->height(); y++) {
                         Color color = buffer_[get_index(x, y)];
@@ -176,6 +175,13 @@ namespace esphome
             if(dma_display_->getCfg().double_buff) {
                 dma_display_->fillScreenRGB888(color.r, color.g, color.b);
             }
+            else {
+                for(int x = 0; x < dma_display_->width(); x++) {
+                    for(int y = 0; y < dma_display_->height(); y++) {
+                        buffer_[get_index(x,y)] = color;
+                    }
+                }
+            }
         }
 
         void MatrixDisplay::filled_rectangle(int x1, int y1, int width, int height, Color color)
@@ -183,6 +189,9 @@ namespace esphome
             // Wrap fill rectangle method
             if(dma_display_->getCfg().double_buff) {
                 dma_display_->fillRect(x1, y1, width, width, color.r, color.g, color.b);
+            }
+            else {
+                // TODO write to buffer
             }
         }
 
