@@ -167,7 +167,7 @@ namespace esphome
         }
 
         unsigned int MatrixDisplay::get_index(int x, int y) {
-            return x + (y * this->get_height_internal());
+            return x + (y * this->get_width_internal());
         }
 
         void MatrixDisplay::fill(Color color)
