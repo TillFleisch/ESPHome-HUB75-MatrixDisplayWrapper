@@ -50,6 +50,8 @@ display:
     height: 32
 ```
 
+An example config with the correct GPIO mappings for the Adafruit Matrix Portal S3 ESP32-S3 based board with HUB75 interface can be found [here](matrix-portal-s3-example.yaml). This configuration should also work for any ESP32-S3-WROOM MCU.
+
 The additional settings are used to set the configuration variables for the wrapped display library. For more information on how to use these and their purpose please refer to the library's [documentation](https://github.com/mrcodetastic/ESP32-HUB75-MatrixPanel-DMA/tree/master) and [examples](https://github.com/mrcodetastic/ESP32-HUB75-MatrixPanel-DMA/tree/master/examples).
 
 - **id**(**Required**, string): Matrix ID which will be used for entity configuration.

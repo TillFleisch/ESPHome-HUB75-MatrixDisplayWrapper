@@ -1,0 +1,52 @@
+esphome:
+  name: matrix-display
+  friendly_name: Matrix Display
+
+external_components:
+  - source: github://TillFleisch/ESPHome-HUB75-MatrixDisplayWrapper@main
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: arduino
+
+font:
+  # gfonts://family[@weight]
+  - file: "gfonts://Roboto"
+    id: roboto
+    size: 10
+
+display:
+  - platform: hub75_matrix_display
+    id: matrix
+    width: 64
+    height: 32
+    R1_pin: 42
+    G1_pin: 41
+    B1_pin: 40
+    R2_pin: 38
+    G2_pin: 39
+    B2_pin: 37
+    A_pin: 45
+    B_pin: 36
+    C_pin: 48
+    D_pin: 35
+    E_pin: 21
+    LAT_pin: 47
+    OE_pin: 14
+    CLK_pin: 2
+
+    lambda: |-
+      it.print(0, 0, id(roboto), "Hello World!");
+
+switch:
+  - platform: hub75_matrix_display
+    matrix_id: matrix
+    name: "Power"
+    restore_mode: ALWAYS_ON
+    id: power
+
+number:
+  - platform: hub75_matrix_display
+    matrix_id: matrix
+    name: "Brightness"
