@@ -32,10 +32,13 @@ namespace esphome
             if (user_defined_clock_phase_)
                 mxconfig.clkphase = clock_phase_;
 
+            if (user_defined_double_buffer_)
+                mxconfig.double_buff = double_buffer_;
+            else 
+                mxconfig.double_buff = true;
+
             // The min refresh rate correlates with the update frequency of the component
             mxconfig.min_refresh_rate = 1000 / update_interval_;
-
-            mxconfig.double_buff = true;
 
             // Display Setup
             dma_display_ = new MatrixPanel_I2S_DMA(mxconfig);
@@ -45,6 +48,8 @@ namespace esphome
 
             // Default to off if power switches are present
             set_state(!power_switches_.size());
+
+            buffer_ = (Color*) calloc((dma_display_->width() * dma_display_->height()), sizeof(Color));
         }
 
         /**
@@ -61,8 +66,19 @@ namespace esphome
             {
                 dma_display_->clearScreen();
             }
-            // Flip buffer to show changes
-            dma_display_->flipDMABuffer();
+            if(dma_display_->getCfg().double_buff) { 
+                // Flip buffer to show changes
+                dma_display_->flipDMABuffer();
+            }
+            else {
+                for(int x = 0; x < dma_display_->width(); x++) {
+                    for(int y = 0; y < dma_display_->height(); y++) {
+                        Color color = buffer_[get_index(x, y)];
+                        dma_display_->drawPixelRGB888(x, y, color.r, color.g, color.b);
+                        buffer_[get_index(x, y)] = Color(0, 0, 0);
+                    }
+                }
+            }
         }
 
         void MatrixDisplay::dump_config()
@@ -119,6 +135,8 @@ namespace esphome
             ESP_LOGCONFIG(TAG, "Clock Phase: %s", dma_display_->getCfg().clkphase ? "true" : "false");
 
             ESP_LOGCONFIG(TAG, "Min refresh rate: %i", dma_display_->getCfg().min_refresh_rate);
+
+            ESP_LOGCONFIG(TAG, "Double Buffer: %s", dma_display_->getCfg().double_buff ? "true" : "false");
         }
 
         void MatrixDisplay::set_state(bool state)
@@ -139,19 +157,46 @@ namespace esphome
                 return;
 
             // Update pixel value in buffer
-            dma_display_->drawPixelRGB888(x, y, color.r, color.g, color.b);
+            if(dma_display_->getCfg().double_buff) {
+                dma_display_->drawPixelRGB888(x, y, color.r, color.g, color.b);
+            }
+            else {
+                buffer_[get_index(x,y)] = color;
+            }
+        }
+
+        unsigned int MatrixDisplay::get_index(int x, int y) {
+            return x + (y * this->get_width_internal());
         }
 
         void MatrixDisplay::fill(Color color)
         {
             // Wrap fill screen method
-            dma_display_->fillScreenRGB888(color.r, color.g, color.b);
+            if(dma_display_->getCfg().double_buff) {
+                dma_display_->fillScreenRGB888(color.r, color.g, color.b);
+            }
+            else {
+                for(int x = 0; x < dma_display_->width(); x++) {
+                    for(int y = 0; y < dma_display_->height(); y++) {
+                        buffer_[get_index(x,y)] = color;
+                    }
+                }
+            }
         }
 
         void MatrixDisplay::filled_rectangle(int x1, int y1, int width, int height, Color color)
         {
             // Wrap fill rectangle method
-            dma_display_->fillRect(x1, y1, width, width, color.r, color.g, color.b);
+            if(dma_display_->getCfg().double_buff) {
+                dma_display_->fillRect(x1, y1, width, height, color.r, color.g, color.b);
+            }
+            else {
+                for(int x = x1; x < width; x++) {
+                    for(int y = y1; y < height; y++) {
+                        buffer_[get_index(x,y)] = color;
+                    }
+                }
+            }
         }
 
     } // namespace matrix_display

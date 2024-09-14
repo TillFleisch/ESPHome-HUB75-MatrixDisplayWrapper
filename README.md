@@ -28,6 +28,7 @@ esphome:
 
 external_components:
   - source: github://TillFleisch/ESPHome-HUB75-MatrixDisplayWrapper@main
+    refresh: 0s 
 
 esp32:
   board: esp32dev

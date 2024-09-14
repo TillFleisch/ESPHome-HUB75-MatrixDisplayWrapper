@@ -172,6 +172,17 @@ namespace esphome
                 clock_phase_ = clock_phase;
             }
 
+            /**
+             * Sets the user defined double_buffer.
+             *
+             * @param double_buffer double_buffer value
+             */
+            void set_double_buffer(bool double_buffer)
+            {
+                user_defined_double_buffer_ = true;
+                double_buffer_ = double_buffer;
+            }
+
             display::DisplayType get_display_type() override
             {
                 return display::DisplayType::DISPLAY_TYPE_COLOR;
@@ -248,7 +259,13 @@ namespace esphome
             /// @brief user defined latch blanking value
             int latch_blanking_ = -1;
 
-            /// @brief determines if the user has defined a clock phase
+            /// @brief determines if the user has defined double_buffer
+            bool user_defined_double_buffer_ = false;
+
+            /// @brief user defined double_buffer
+            bool double_buffer_;
+
+            /// @brief determines if the user has defined double buffer
             bool user_defined_clock_phase_ = false;
 
             /// @brief user defined clock phase
@@ -275,6 +292,8 @@ namespace esphome
             /// @brief brightness value number entities belonging to this matrix display
             std::vector<matrix_display_brightness::MatrixDisplayBrightness *> brightness_values_;
 
+            Color *buffer_;
+
             int get_width_internal() override
             {
                 return panel_width_ * chain_length_;
@@ -292,6 +311,8 @@ namespace esphome
              * @param color Color of the pixel
              */
             void draw_absolute_pixel_internal(int x, int y, Color color) override;
+
+            unsigned int get_index(int x, int y);
         };
 
     } // namespace matrix_display
