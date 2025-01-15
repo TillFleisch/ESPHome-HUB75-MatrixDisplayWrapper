@@ -95,6 +95,9 @@ namespace esphome
             case HUB75_I2S_CFG::shift_driver::SM5266P:
                 ESP_LOGCONFIG(TAG, "Driver: SM5266P");
                 break;
+            case HUB75_I2S_CFG::shift_driver::DP3246_SM5368:
+                ESP_LOGCONFIG(TAG, "Driver: DP3246_SM5368");
+                break;
             }
 
             // Log i2speed
