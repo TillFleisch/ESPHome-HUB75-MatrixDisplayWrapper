@@ -42,7 +42,7 @@ namespace esphome
              */
             void register_power_switch(matrix_display_switch::MatrixDisplaySwitch *power_switch)
             {
-                power_switches_.push_back(power_switch);
+                this->power_switches_.push_back(power_switch);
                 set_reference(power_switch, this);
             };
 
@@ -53,7 +53,7 @@ namespace esphome
              */
             void register_brightness(matrix_display_brightness::MatrixDisplayBrightness *brightness)
             {
-                brightness_values_.push_back(brightness);
+                this->brightness_values_.push_back(brightness);
                 set_reference(brightness, this);
             };
 
@@ -64,7 +64,7 @@ namespace esphome
              */
             void set_panel_height(int panel_height)
             {
-                this->panel_height_ = panel_height;
+                this->mxconfig_.mx_height = panel_height;
             }
 
             /**
@@ -74,7 +74,7 @@ namespace esphome
              */
             void set_panel_width(int panel_width)
             {
-                this->panel_width_ = panel_width;
+                this->mxconfig_.mx_width = panel_width;
             }
 
             /**
@@ -84,7 +84,7 @@ namespace esphome
              */
             void set_chain_length(int chain_length)
             {
-                this->chain_length_ = chain_length;
+                this->mxconfig_.chain_length = chain_length;
             }
 
             /**
@@ -102,17 +102,12 @@ namespace esphome
              */
             int get_initial_brightness()
             {
-                return initial_brightness_;
+                return this->initial_brightness_;
             }
 
             void set_pins(InternalGPIOPin *R1_pin, InternalGPIOPin *G1_pin, InternalGPIOPin *B1_pin, InternalGPIOPin *R2_pin, InternalGPIOPin *G2_pin, InternalGPIOPin *B2_pin, InternalGPIOPin *A_pin, InternalGPIOPin *B_pin, InternalGPIOPin *C_pin, InternalGPIOPin *D_pin, InternalGPIOPin *E_pin, InternalGPIOPin *LAT_pin, InternalGPIOPin *OE_pin, InternalGPIOPin *CLK_pin)
             {
-                // Set the e pin to -1 as required by the library if it is not used
-                int8_t e = -1;
-                if (E_pin != NULL)
-                    e = E_pin->get_pin();
-
-                pins_ = {
+                this->mxconfig_.gpio = {
                     static_cast<int8_t>(R1_pin->get_pin()),
                     static_cast<int8_t>(G1_pin->get_pin()),
                     static_cast<int8_t>(B1_pin->get_pin()),
@@ -123,7 +118,7 @@ namespace esphome
                     static_cast<int8_t>(B_pin->get_pin()),
                     static_cast<int8_t>(C_pin->get_pin()),
                     static_cast<int8_t>(D_pin->get_pin()),
-                    e,
+                    static_cast<int8_t>(E_pin != NULL ? E_pin->get_pin() : -1),  // Set the e pin to -1 as required by the library if it is not used
                     static_cast<int8_t>(LAT_pin->get_pin()),
                     static_cast<int8_t>(OE_pin->get_pin()),
                     static_cast<int8_t>(CLK_pin->get_pin())};
@@ -136,8 +131,7 @@ namespace esphome
              */
             void set_driver(HUB75_I2S_CFG::shift_driver driver)
             {
-                user_defined_driver_ = true;
-                driver_ = driver;
+                this->mxconfig_.driver = driver;
             };
 
             /**
@@ -147,8 +141,7 @@ namespace esphome
              */
             void set_i2sspeed(HUB75_I2S_CFG::clk_speed speed)
             {
-                user_defined_i2sspeed_ = true;
-                i2sspeed_ = speed;
+                this->mxconfig_.i2sspeed = speed;
             };
 
             /**
@@ -158,7 +151,7 @@ namespace esphome
              */
             void set_latch_blanking(int latch_blanking)
             {
-                latch_blanking_ = latch_blanking;
+                this->mxconfig_.latch_blanking = latch_blanking;
             };
 
             /**
@@ -168,8 +161,7 @@ namespace esphome
              */
             void set_clock_phase(bool clock_phase)
             {
-                user_defined_clock_phase_ = true;
-                clock_phase_ = clock_phase;
+                this->mxconfig_.clkphase = clock_phase;
             }
 
             display::DisplayType get_display_type() override
@@ -201,7 +193,10 @@ namespace esphome
              *
              * @param state new state
              */
-            void set_state(bool state);
+            void set_state(bool state)
+            {
+                this->enabled_ = state;
+            }
 
             /**
              * Sets the brightness value of the display
@@ -215,7 +210,7 @@ namespace esphome
              */
             std::vector<matrix_display_switch::MatrixDisplaySwitch *> get_power_switches()
             {
-                return power_switches_;
+                return this->power_switches_;
             }
 
             /**
@@ -223,45 +218,15 @@ namespace esphome
              */
             std::vector<matrix_display_brightness::MatrixDisplayBrightness *> get_brightness_values()
             {
-                return brightness_values_;
+                return this->brightness_values_;
             }
 
         protected:
             /// @brief Wrapped matrix display
             MatrixPanel_I2S_DMA *dma_display_ = nullptr;
 
-            /// @brief pin configuration
-            HUB75_I2S_CFG::i2s_pins pins_;
-
-            /// @brief determines if the user has defined a driver enum
-            bool user_defined_driver_ = false;
-
-            /// @brief driver used for the matrix display
-            HUB75_I2S_CFG::shift_driver driver_;
-
-            /// @brief determines if the user has defined a i2sspeed enum
-            bool user_defined_i2sspeed_ = false;
-
-            /// @brief i2s clock speed
-            HUB75_I2S_CFG::clk_speed i2sspeed_;
-
-            /// @brief user defined latch blanking value
-            int latch_blanking_ = -1;
-
-            /// @brief determines if the user has defined a clock phase
-            bool user_defined_clock_phase_ = false;
-
-            /// @brief user defined clock phase
-            bool clock_phase_;
-
-            /// @brief of each panel
-            int panel_width_ = 64;
-
-            /// @brief height of each panel
-            int panel_height_ = 32;
-
-            /// @brief nr of panels chained one-after another
-            int chain_length_ = 1;
+            /// @brief Matrix configuration
+            HUB75_I2S_CFG mxconfig_;
 
             /// @brief initial brightness of the display
             int initial_brightness_ = 128;
@@ -277,11 +242,11 @@ namespace esphome
 
             int get_width_internal() override
             {
-                return panel_width_ * chain_length_;
+                return this->mxconfig_.mx_width * this->mxconfig_.chain_length;
             };
             int get_height_internal() override
             {
-                return panel_height_;
+                return this->mxconfig_.mx_height;
             };
 
             /**
