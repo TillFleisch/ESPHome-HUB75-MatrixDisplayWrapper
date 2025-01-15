@@ -100,12 +100,9 @@ CONFIG_SCHEMA = display.FULL_DISPLAY_SCHEMA.extend(
 
 async def to_code(config):
     if not config[USE_CUSTOM_LIBRARY]:
-        cg.add_library("SPI", None)
-        cg.add_library("Wire", None)
-        cg.add_library("Adafruit BusIO", None)
-        cg.add_library("adafruit/Adafruit GFX Library", None)
+        cg.add_build_flag("-DNO_GFX=1")
         cg.add_library(
-            "https://github.com/TillFleisch/ESP32-HUB75-MatrixPanel-DMA#optional_logging",
+            "https://github.com/mrcodetastic/ESP32-HUB75-MatrixPanel-DMA",
             None,
         )
 
