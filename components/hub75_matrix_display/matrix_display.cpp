@@ -100,22 +100,7 @@ namespace esphome
                 break;
             }
 
-            // Log i2speed
-            switch (dma_display_->getCfg().i2sspeed)
-            {
-            case HUB75_I2S_CFG::clk_speed::HZ_8M:
-                ESP_LOGCONFIG(TAG, "I2SSpeed: HZ_8M");
-                break;
-            case HUB75_I2S_CFG::clk_speed::HZ_10M:
-                ESP_LOGCONFIG(TAG, "I2SSpeed: HZ_10M");
-                break;
-            case HUB75_I2S_CFG::clk_speed::HZ_15M:
-                ESP_LOGCONFIG(TAG, "I2SSpeed: HZ_15M");
-                break;
-            case HUB75_I2S_CFG::clk_speed::HZ_20M:
-                ESP_LOGCONFIG(TAG, "I2SSpeed: HZ_20M");
-                break;
-            }
+            ESP_LOGCONFIG(TAG, "I2S Speed: %u MHz", (uint32_t)this->dma_display_->getCfg().i2sspeed / 1000000);
 
             ESP_LOGCONFIG(TAG, "Latch blanking: %i", dma_display_->getCfg().latch_blanking);
 

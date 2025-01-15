@@ -61,6 +61,7 @@ CLOCK_SPEEDS = {
     "HZ_8M": clk_speed.HZ_8M,
     "HZ_10M": clk_speed.HZ_10M,
     "HZ_15M": clk_speed.HZ_15M,
+    "HZ_16M": clk_speed.HZ_16M,
     "HZ_20M": clk_speed.HZ_20M,
 }
 
