@@ -78,8 +78,8 @@ The additional settings are used to set the configuration variables for the wrap
 - **OE_pin**(**Optional**, [Pin](https://esphome.io/guides/configuration-types.html#config-pin)): Pin connected to the OE pin on the matrix display. Defaults to `15`.
 - **CLK_pin**(**Optional**, [Pin](https://esphome.io/guides/configuration-types.html#config-pin)): Pin connected to the CLK pin on the matrix display. Defaults to `16`.
 
-- **driver**(**Optional**): Driver used for configuring the display. Select one of `SHIFTREG`, `FM6124`, `FM6126A`, `ICN2038S`, `MBI5124`, `SM5266`.
-- **i2sspeed**(**Optional**): I2SSpeed used for configuring the display. Select one of `HZ_8M`, `HZ_10M`, `HZ_15M`, `HZ_20M`.
+- **driver**(**Optional**): Driver used for configuring the display. Select one of `SHIFTREG`, `FM6124`, `FM6126A`, `ICN2038S`, `MBI5124`, `SM5266`, `DP3246_SM5368`.
+- **i2sspeed**(**Optional**): I2SSpeed used for configuring the display. Select one of `HZ_8M`, `HZ_10M`, `HZ_15M`, `HZ_16M`,`HZ_20M`.
 - **latch_blanking**(**Optional**, int): Latch blanking value used for configuring the display.
 - **clock_phase**(**Optional**, boolean): Clock phase value used for configuring the display.
 - **use_custom_library**(**Optional**, boolean): If set to `true` a custom library must be defined using `platformio_options:lib_deps`. Defaults to `false`. See [this example](custom_library.yaml) for more details.

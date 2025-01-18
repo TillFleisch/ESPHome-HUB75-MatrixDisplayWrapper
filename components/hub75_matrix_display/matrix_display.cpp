@@ -69,56 +69,43 @@ namespace esphome
         {
             ESP_LOGCONFIG(TAG, "MatrixDisplay:");
 
+            HUB75_I2S_CFG cfg = this->dma_display_->getCfg();
+
             // Log pin settings
-            ESP_LOGCONFIG(TAG, "Pins: R1:%i, G1:%i, B1:%i, R2:%i, G2:%i, B2:%i", pins_.r1, pins_.g1, pins_.b1, pins_.r2, pins_.g2, pins_.b2);
-            ESP_LOGCONFIG(TAG, "Pins: A:%i, B:%i, C:%i, D:%i, E:%i", pins_.a, pins_.b, pins_.c, pins_.d, pins_.e);
-            ESP_LOGCONFIG(TAG, "Pins: LAT:%i, OE:%i, CLK:%i", pins_.lat, pins_.oe, pins_.b1, pins_.clk);
+            ESP_LOGCONFIG(TAG, "  Pins: R1:%i, G1:%i, B1:%i, R2:%i, G2:%i, B2:%i", cfg.gpio.r1, cfg.gpio.g1, cfg.gpio.b1, cfg.gpio.r2, cfg.gpio.g2, cfg.gpio.b2);
+            ESP_LOGCONFIG(TAG, "  Pins: A:%i, B:%i, C:%i, D:%i, E:%i", cfg.gpio.a, cfg.gpio.b, cfg.gpio.c, cfg.gpio.d, cfg.gpio.e);
+            ESP_LOGCONFIG(TAG, "  Pins: LAT:%i, OE:%i, CLK:%i", cfg.gpio.lat, cfg.gpio.oe, cfg.gpio.clk);
 
             // Log driver settings
-            switch (dma_display_->getCfg().driver)
+            switch (cfg.driver)
             {
             case HUB75_I2S_CFG::shift_driver::SHIFTREG:
-                ESP_LOGCONFIG(TAG, "Driver: SHIFTREG");
+                ESP_LOGCONFIG(TAG, "  Driver: SHIFTREG");
                 break;
             case HUB75_I2S_CFG::shift_driver::FM6124:
-                ESP_LOGCONFIG(TAG, "Driver: FM6124");
+                ESP_LOGCONFIG(TAG, "  Driver: FM6124");
                 break;
             case HUB75_I2S_CFG::shift_driver::FM6126A:
-                ESP_LOGCONFIG(TAG, "Driver: FM6126A");
+                ESP_LOGCONFIG(TAG, "  Driver: FM6126A");
                 break;
             case HUB75_I2S_CFG::shift_driver::ICN2038S:
-                ESP_LOGCONFIG(TAG, "Driver: ICN2038S");
+                ESP_LOGCONFIG(TAG, "  Driver: ICN2038S");
                 break;
             case HUB75_I2S_CFG::shift_driver::MBI5124:
-                ESP_LOGCONFIG(TAG, "Driver: MBI5124");
+                ESP_LOGCONFIG(TAG, "  Driver: MBI5124");
                 break;
             case HUB75_I2S_CFG::shift_driver::SM5266P:
-                ESP_LOGCONFIG(TAG, "Driver: SM5266P");
+                ESP_LOGCONFIG(TAG, "  Driver: SM5266P");
+                break;
+            case HUB75_I2S_CFG::shift_driver::DP3246_SM5368:
+                ESP_LOGCONFIG(TAG, "  Driver: DP3246_SM5368");
                 break;
             }
 
-            // Log i2speed
-            switch (dma_display_->getCfg().i2sspeed)
-            {
-            case HUB75_I2S_CFG::clk_speed::HZ_8M:
-                ESP_LOGCONFIG(TAG, "I2SSpeed: HZ_8M");
-                break;
-            case HUB75_I2S_CFG::clk_speed::HZ_10M:
-                ESP_LOGCONFIG(TAG, "I2SSpeed: HZ_10M");
-                break;
-            case HUB75_I2S_CFG::clk_speed::HZ_15M:
-                ESP_LOGCONFIG(TAG, "I2SSpeed: HZ_15M");
-                break;
-            case HUB75_I2S_CFG::clk_speed::HZ_20M:
-                ESP_LOGCONFIG(TAG, "I2SSpeed: HZ_20M");
-                break;
-            }
-
-            ESP_LOGCONFIG(TAG, "Latch blanking: %i", dma_display_->getCfg().latch_blanking);
-
-            ESP_LOGCONFIG(TAG, "Clock Phase: %s", dma_display_->getCfg().clkphase ? "true" : "false");
-
-            ESP_LOGCONFIG(TAG, "Min refresh rate: %i", dma_display_->getCfg().min_refresh_rate);
+            ESP_LOGCONFIG(TAG, "  I2S Speed: %u MHz", (uint32_t)cfg.i2sspeed / 1000000);
+            ESP_LOGCONFIG(TAG, "  Latch Blanking: %i", cfg.latch_blanking);
+            ESP_LOGCONFIG(TAG, "  Clock Phase: %s", TRUEFALSE(cfg.clkphase));
+            ESP_LOGCONFIG(TAG, "  Min Refresh Rate: %i", cfg.min_refresh_rate);
         }
 
         void MatrixDisplay::set_state(bool state)
