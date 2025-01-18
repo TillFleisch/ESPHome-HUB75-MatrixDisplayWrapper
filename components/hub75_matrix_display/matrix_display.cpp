@@ -72,9 +72,9 @@ namespace esphome
             HUB75_I2S_CFG cfg = this->dma_display_->getCfg();
 
             // Log pin settings
-            ESP_LOGCONFIG(TAG, "  Pins: R1:%i, G1:%i, B1:%i, R2:%i, G2:%i, B2:%i", cfg.i2s_pins.r1, cfg.i2s_pins.g1, cfg.i2s_pins.b1, cfg.i2s_pins.r2, cfg.i2s_pins.g2, cfg.i2s_pins.b2);
-            ESP_LOGCONFIG(TAG, "  Pins: A:%i, B:%i, C:%i, D:%i, E:%i", cfg.i2s_pins.a, cfg.i2s_pins.b, cfg.i2s_pins.c, cfg.i2s_pins.d, cfg.i2s_pins.e);
-            ESP_LOGCONFIG(TAG, "  Pins: LAT:%i, OE:%i, CLK:%i", cfg.i2s_pins.lat, cfg.i2s_pins.oe, cfg.i2s_pins.clk);
+            ESP_LOGCONFIG(TAG, "  Pins: R1:%i, G1:%i, B1:%i, R2:%i, G2:%i, B2:%i", cfg.gpio.r1, cfg.gpio.g1, cfg.gpio.b1, cfg.gpio.r2, cfg.gpio.g2, cfg.gpio.b2);
+            ESP_LOGCONFIG(TAG, "  Pins: A:%i, B:%i, C:%i, D:%i, E:%i", cfg.gpio.a, cfg.gpio.b, cfg.gpio.c, cfg.gpio.d, cfg.gpio.e);
+            ESP_LOGCONFIG(TAG, "  Pins: LAT:%i, OE:%i, CLK:%i", cfg.gpio.lat, cfg.gpio.oe, cfg.gpio.clk);
 
             // Log driver settings
             switch (cfg.driver)
