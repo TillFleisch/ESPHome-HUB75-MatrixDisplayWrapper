@@ -5,7 +5,7 @@ namespace esphome
     namespace matrix_display
     {
 
-        static const char *const TAG = "MatrixDisplay";
+        static const char *const TAG = "matrix_display";
 
         /**
          * Initialize the wrapped matrix display with user parameters
