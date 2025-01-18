@@ -118,7 +118,7 @@ namespace esphome
                     static_cast<int8_t>(B_pin->get_pin()),
                     static_cast<int8_t>(C_pin->get_pin()),
                     static_cast<int8_t>(D_pin->get_pin()),
-                    static_cast<int8_t>(E_pin != NULL ? E_pin->get_pin() : -1),  // Set the e pin to -1 as required by the library if it is not used
+                    static_cast<int8_t>(E_pin != NULL ? E_pin->get_pin() : -1), // Set the e pin to -1 as required by the library if it is not used
                     static_cast<int8_t>(LAT_pin->get_pin()),
                     static_cast<int8_t>(OE_pin->get_pin()),
                     static_cast<int8_t>(CLK_pin->get_pin())};
