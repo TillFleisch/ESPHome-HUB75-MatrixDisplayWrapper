@@ -5,7 +5,7 @@ namespace esphome
     namespace matrix_display
     {
 
-        static const char *const TAG = "MatrixDisplay";
+        static const char *const TAG = "matrix_display";
 
         /**
          * Initialize the wrapped matrix display with user parameters
@@ -14,37 +14,19 @@ namespace esphome
         {
             ESP_LOGCONFIG(TAG, "Setting up MatrixDisplay...");
 
-            // Module configuration
-            HUB75_I2S_CFG mxconfig(
-                panel_width_,  // module width
-                panel_height_, // module height
-                chain_length_, // Chain length
-                pins_);
-
-            if (user_defined_driver_)
-                mxconfig.driver = driver_;
-            if (user_defined_i2sspeed_)
-                mxconfig.i2sspeed = i2sspeed_;
-
-            if (latch_blanking_ >= 0)
-                mxconfig.latch_blanking = latch_blanking_;
-
-            if (user_defined_clock_phase_)
-                mxconfig.clkphase = clock_phase_;
-
             // The min refresh rate correlates with the update frequency of the component
-            mxconfig.min_refresh_rate = 1000 / update_interval_;
+            this->mxconfig_.min_refresh_rate = 1000 / update_interval_;
 
-            mxconfig.double_buff = true;
+            this->mxconfig_.double_buff = true;
 
             // Display Setup
-            dma_display_ = new MatrixPanel_I2S_DMA(mxconfig);
-            dma_display_->begin();
-            set_brightness(initial_brightness_);
-            dma_display_->clearScreen();
+            dma_display_ = new MatrixPanel_I2S_DMA(this->mxconfig_);
+            this->dma_display_->begin();
+            set_brightness(this->initial_brightness_);
+            this->dma_display_->clearScreen();
 
             // Default to off if power switches are present
-            set_state(!power_switches_.size());
+            set_state(!this->power_switches_.size());
         }
 
         /**
@@ -52,17 +34,17 @@ namespace esphome
          */
         void MatrixDisplay::update()
         {
-            if (enabled_)
+            if (this->enabled_)
             {
                 // Draw updates to the screen
                 this->do_update_();
             }
             else
             {
-                dma_display_->clearScreen();
+                this->dma_display_->clearScreen();
             }
             // Flip buffer to show changes
-            dma_display_->flipDMABuffer();
+            this->dma_display_->flipDMABuffer();
         }
 
         void MatrixDisplay::dump_config()
@@ -108,15 +90,10 @@ namespace esphome
             ESP_LOGCONFIG(TAG, "  Min Refresh Rate: %i", cfg.min_refresh_rate);
         }
 
-        void MatrixDisplay::set_state(bool state)
-        {
-            enabled_ = state;
-        }
-
         void MatrixDisplay::set_brightness(int brightness)
         {
             // Wrap brightness function
-            dma_display_->setBrightness8(brightness);
+            this->dma_display_->setBrightness8(brightness);
         }
 
         void HOT MatrixDisplay::draw_absolute_pixel_internal(int x, int y, Color color)
@@ -126,19 +103,19 @@ namespace esphome
                 return;
 
             // Update pixel value in buffer
-            dma_display_->drawPixelRGB888(x, y, color.r, color.g, color.b);
+            this->dma_display_->drawPixelRGB888(x, y, color.r, color.g, color.b);
         }
 
         void MatrixDisplay::fill(Color color)
         {
             // Wrap fill screen method
-            dma_display_->fillScreenRGB888(color.r, color.g, color.b);
+            this->dma_display_->fillScreenRGB888(color.r, color.g, color.b);
         }
 
         void MatrixDisplay::filled_rectangle(int x1, int y1, int width, int height, Color color)
         {
             // Wrap fill rectangle method
-            dma_display_->fillRect(x1, y1, width, width, color.r, color.g, color.b);
+            this->dma_display_->fillRect(x1, y1, width, width, color.r, color.g, color.b);
         }
 
     } // namespace matrix_display

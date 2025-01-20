@@ -6,7 +6,7 @@
 
 namespace esphome::matrix_display::matrix_display_switch
 {
-    static const char *TAG = "MatrixDisplaySwitch";
+    static const char *TAG = "matrix_display.switch";
 
     class MatrixDisplaySwitch : public switch_::Switch, public Component
     {

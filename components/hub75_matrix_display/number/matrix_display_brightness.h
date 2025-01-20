@@ -6,7 +6,7 @@
 
 namespace esphome::matrix_display::matrix_display_brightness
 {
-    static const char *TAG = "MatrixDisplayBrightness";
+    static const char *TAG = "matrix_display.number";
     class MatrixDisplayBrightness : public number::Number, public Component
     {
     public:
