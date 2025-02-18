@@ -23,7 +23,7 @@ namespace esphome
             dma_display_ = new MatrixPanel_I2S_DMA(this->mxconfig_);
             this->dma_display_->begin();
             
-            FourScanPanel = new VirtualMatrixPanel((*this->dma_display_), this->mxconfig_.chain_length, 1, this->mxconfig_.mx_width , his->mxconfig_.mx_height);
+            FourScanPanel = new VirtualMatrixPanel((*this->dma_display_), this->mxconfig_.chain_length, 1, this->mxconfig_.mx_width , this->mxconfig_.mx_height);
             this->FourScanPanel->setPhysicalPanelScanRate(FOUR_SCAN_32PX_HIGH);
            
             set_brightness(this->initial_brightness_);
