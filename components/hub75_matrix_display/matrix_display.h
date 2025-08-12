@@ -9,6 +9,9 @@
 
 #include "ESP32-HUB75-MatrixPanel-I2S-DMA.h"
 
+using esphome::display::ColorBitness;
+using esphome::display::ColorOrder;
+
 namespace esphome
 {
     namespace matrix_display
@@ -56,6 +59,16 @@ namespace esphome
                 this->brightness_values_.push_back(brightness);
                 set_reference(brightness, this);
             };
+
+            /**
+             * Sets the user defined double buffer boolean.
+             *
+             * @param double_buffer double buffer value
+             */
+            void set_double_buffer(bool double_buffer)
+            {
+                this->mxconfig_.double_buff = double_buffer;
+            }
 
             /**
              * Sets the hight of each individual panel.
@@ -257,6 +270,13 @@ namespace esphome
              * @param color Color of the pixel
              */
             void draw_absolute_pixel_internal(int x, int y, Color color) override;
+
+            void draw_pixels_at(int x_start, int y_start, int w, int h,
+                                const uint8_t *ptr,
+                                display::ColorOrder order,
+                                display::ColorBitness bitness,
+                                bool big_endian,
+                                int x_offset, int y_offset, int x_pad) override;
         };
 
     } // namespace matrix_display

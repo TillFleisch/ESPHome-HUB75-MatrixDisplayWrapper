@@ -37,6 +37,7 @@ DRIVER = "driver"
 I2SSPEED = "i2sspeed"
 LATCH_BLANKING = "latch_blanking"
 CLOCK_PHASE = "clock_phase"
+DOUBLE_BUFFER = "double_buffer"
 
 USE_CUSTOM_LIBRARY = "use_custom_library"
 
@@ -70,12 +71,10 @@ CONFIG_SCHEMA = display.FULL_DISPLAY_SCHEMA.extend(
         cv.GenerateID(): cv.declare_id(MatrixDisplay),
         cv.Required(CONF_WIDTH): cv.positive_int,
         cv.Required(CONF_HEIGHT): cv.positive_int,
+        cv.Required(DOUBLE_BUFFER): cv.boolean,
         cv.Optional(USE_CUSTOM_LIBRARY, default=False): cv.boolean,
         cv.Optional(CHAIN_LENGTH, default=1): cv.positive_int,
         cv.Optional(BRIGHTNESS, default=128): cv.int_range(min=0, max=255),
-        cv.Optional(
-            CONF_UPDATE_INTERVAL, default="16ms"
-        ): cv.positive_time_period_milliseconds,
         cv.Optional(R1_PIN, default=25): pins.gpio_output_pin_schema,
         cv.Optional(G1_PIN, default=26): pins.gpio_output_pin_schema,
         cv.Optional(B1_PIN, default=27): pins.gpio_output_pin_schema,
