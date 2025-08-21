@@ -26,6 +26,7 @@ namespace esphome
             dma_display_ = new MatrixPanel_I2S_DMA(this->mxconfig_);
             this->dma_display_->begin();
             set_brightness(this->initial_brightness_);
+            this->stored_brightness_ = this->initial_brightness_;
             this->dma_display_->clearScreen();
 
             // Default to off if power switches are present
@@ -37,12 +38,10 @@ namespace esphome
          */
         void MatrixDisplay::update()
         {
-            if (this->enabled_) {
-                // Draw updates to the screen
-                this->do_update_();
-            } else {
-                this->dma_display_->clearScreen();
-            }
+            if (!this->dma_display_) return;
+            if (!this->enabled_) return;
+
+            this->do_update_();
 
             // Flip buffer to show changes
             if (this->mxconfig_.double_buff) {
@@ -92,12 +91,21 @@ namespace esphome
 
         void MatrixDisplay::set_brightness(int brightness)
         {
-            // Wrap brightness function
-            this->dma_display_->setBrightness8(brightness);
+            // Remember last non-zero so power-on can restore without fighting the number entity
+            if (brightness > 0) this->stored_brightness_ = brightness;
+            // Only apply to hardware when enabled; if off, just remember it
+            if (this->enabled_ && this->dma_display_ != nullptr) {
+                this->dma_display_->setBrightness8(brightness);
+                // Latch change & avoid stale flash
+                this->dma_display_->clearScreen();
+            }
         }
 
         void HOT MatrixDisplay::draw_absolute_pixel_internal(int x, int y, Color color)
         {
+            if (!this->dma_display_) return;
+            if (!this->enabled_) return;
+
             // Reject invalid pixels
             if (x >= this->get_width_internal() || x < 0 || y >= this->get_height_internal() || y < 0)
                 return;
@@ -118,6 +126,7 @@ namespace esphome
             int x_offset, int y_offset, int x_pad)
         {
             if (!this->dma_display_) return;
+            if (!this->enabled_) return;
 
             const int stride_px = x_offset + w + x_pad;  // LVGL/ESPHome-provided stride.
 
@@ -156,12 +165,18 @@ namespace esphome
 
         void MatrixDisplay::fill(Color color)
         {
+            if (!this->dma_display_) return;
+            if (!this->enabled_) return;
+
             // Wrap fill screen method
             this->dma_display_->fillScreenRGB888(color.r, color.g, color.b);
         }
 
         void MatrixDisplay::filled_rectangle(int x1, int y1, int width, int height, Color color)
         {
+            if (!this->dma_display_) return;
+            if (!this->enabled_) return;
+
             // Wrap fill rectangle method
             this->dma_display_->fillRect(x1, y1, width, width, color.r, color.g, color.b);
         }

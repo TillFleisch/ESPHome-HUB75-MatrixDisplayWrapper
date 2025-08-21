@@ -209,6 +209,17 @@ namespace esphome
             void set_state(bool state)
             {
                 this->enabled_ = state;
+
+                if (this->dma_display_ == nullptr) return;
+                if (this->enabled_) {
+                    // restore last non-zero brightness (don’t fight the number entity)
+                    int restore = this->stored_brightness_ > 0 ? this->stored_brightness_ : this->initial_brightness_;
+                    this->dma_display_->setBrightness8(restore);
+                    this->dma_display_->clearScreen();
+                } else {
+                    this->dma_display_->setBrightness8(0);
+                    this->dma_display_->clearScreen();
+                }
             }
 
             /**
@@ -246,6 +257,9 @@ namespace esphome
 
             /// @brief on-off status of the display matrix
             bool enabled_ = false;
+
+            /// @brief last non-zero brightness for restoring after power-on
+            int stored_brightness_ = 128;
 
             /// @brief power switches belonging to this matrix display
             std::vector<matrix_display_switch::MatrixDisplaySwitch *> power_switches_;
