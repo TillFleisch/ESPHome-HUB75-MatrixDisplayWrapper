@@ -96,8 +96,6 @@ namespace esphome
             // Only apply to hardware when enabled; if off, just remember it
             if (this->enabled_ && this->dma_display_ != nullptr) {
                 this->dma_display_->setBrightness8(brightness);
-                // Latch change & avoid stale flash
-                this->dma_display_->clearScreen();
             }
         }
 

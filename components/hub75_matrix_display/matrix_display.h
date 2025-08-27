@@ -215,10 +215,8 @@ namespace esphome
                     // restore last non-zero brightness (don’t fight the number entity)
                     int restore = this->stored_brightness_ > 0 ? this->stored_brightness_ : this->initial_brightness_;
                     this->dma_display_->setBrightness8(restore);
-                    this->dma_display_->clearScreen();
                 } else {
                     this->dma_display_->setBrightness8(0);
-                    this->dma_display_->clearScreen();
                 }
             }
 
