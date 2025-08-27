@@ -9,6 +9,19 @@
 
 #include "ESP32-HUB75-MatrixPanel-I2S-DMA.h"
 
+// --- VirtualMatrix additions (optional compile-time include) ---
+#ifdef USE_VIRTUAL_PANEL
+  #include "ESP32-HUB75-VirtualMatrixPanel_T.hpp"
+  #ifndef VPANEL_CHAIN
+    #define VPANEL_CHAIN CHAIN_TOP_LEFT_DOWN
+  #endif
+  #ifndef VPANEL_SCAN
+    #define VPANEL_SCAN STANDARD_TWO_SCAN
+  #endif
+  using VPanelType = VirtualMatrixPanel_T<VPANEL_CHAIN, ScanTypeMapping<VPANEL_SCAN>, 1>;
+#endif
+// --- End VirtualMatrix additions ---
+
 using esphome::display::ColorBitness;
 using esphome::display::ColorOrder;
 
@@ -243,9 +256,35 @@ namespace esphome
                 return this->brightness_values_;
             }
 
+            // --- VirtualMatrix additions (runtime toggles) ---
+            void set_virtual_enabled(bool enabled) {
+#ifdef USE_VIRTUAL_PANEL
+                this->use_virtual_panel_ = enabled;
+#endif
+            }
+            void set_virtual_rows(int rows) {
+#ifdef USE_VIRTUAL_PANEL
+                this->v_rows_ = (rows < 1) ? 1 : (rows > 255 ? 255 : rows);
+#endif
+            }
+            void set_virtual_cols(int cols) {
+#ifdef USE_VIRTUAL_PANEL
+                this->v_cols_ = (cols < 1) ? 1 : (cols > 255 ? 255 : cols);
+#endif
+            }
+            // --- End VirtualMatrix additions ---
+
         protected:
             /// @brief Wrapped matrix display
             MatrixPanel_I2S_DMA *dma_display_ = nullptr;
+
+#ifdef USE_VIRTUAL_PANEL
+            /// @brief Optional virtual wrapper (maps virtual coords to physical)
+            VPanelType *virtual_display_ = nullptr;
+            bool use_virtual_panel_ = false;
+            uint8_t v_rows_ = 1;
+            uint8_t v_cols_ = 1;
+#endif
 
             /// @brief Matrix configuration
             HUB75_I2S_CFG mxconfig_;
@@ -267,10 +306,20 @@ namespace esphome
 
             int get_width_internal() override
             {
+#ifdef USE_VIRTUAL_PANEL
+                if (this->use_virtual_panel_) {
+                    return this->mxconfig_.mx_width * static_cast<int>(this->v_cols_);
+                }
+#endif
                 return this->mxconfig_.mx_width * this->mxconfig_.chain_length;
             };
             int get_height_internal() override
             {
+#ifdef USE_VIRTUAL_PANEL
+                if (this->use_virtual_panel_) {
+                    return this->mxconfig_.mx_height * static_cast<int>(this->v_rows_);
+                }
+#endif
                 return this->mxconfig_.mx_height;
             };
 
@@ -289,6 +338,27 @@ namespace esphome
                                 display::ColorBitness bitness,
                                 bool big_endian,
                                 int x_offset, int y_offset, int x_pad) override;
+
+        private:
+            // Route drawing through virtual wrapper when enabled.
+            inline void draw_pixel_rgb888_(int x, int y, uint8_t r, uint8_t g, uint8_t b) {
+#ifdef USE_VIRTUAL_PANEL
+                if (this->use_virtual_panel_ && this->virtual_display_) {
+                    this->virtual_display_->drawPixelRGB888(x, y, r, g, b);
+                    return;
+                }
+#endif
+                this->dma_display_->drawPixelRGB888(x, y, r, g, b);
+            }
+            inline void fill_screen_rgb888_(uint8_t r, uint8_t g, uint8_t b) {
+#ifdef USE_VIRTUAL_PANEL
+                if (this->use_virtual_panel_ && this->virtual_display_) {
+                    this->virtual_display_->fillScreenRGB888(r, g, b);
+                    return;
+                }
+#endif
+                this->dma_display_->fillScreenRGB888(r, g, b);
+            }
         };
 
     } // namespace matrix_display

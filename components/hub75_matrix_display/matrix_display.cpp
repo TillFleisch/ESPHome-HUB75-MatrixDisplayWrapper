@@ -29,6 +29,15 @@ namespace esphome
             this->stored_brightness_ = this->initial_brightness_;
             this->dma_display_->clearScreen();
 
+#ifdef USE_VIRTUAL_PANEL
+            if (this->use_virtual_panel_) {
+                // Wrap the physical DMA display with a virtual grid mapper
+                this->virtual_display_ = new VPanelType(this->v_rows_, this->v_cols_,
+                                                        this->mxconfig_.mx_width, this->mxconfig_.mx_height);
+                this->virtual_display_->setDisplay(*this->dma_display_);
+            }
+#endif
+
             // Default to off if power switches are present
             set_state(!this->power_switches_.size());
         }
@@ -87,6 +96,15 @@ namespace esphome
             ESP_LOGCONFIG(TAG, "  Latch Blanking: %i", cfg.latch_blanking);
             ESP_LOGCONFIG(TAG, "  Clock Phase: %s", TRUEFALSE(cfg.clkphase));
             ESP_LOGCONFIG(TAG, "  Min Refresh Rate: %i", cfg.min_refresh_rate);
+
+#ifdef USE_VIRTUAL_PANEL
+            ESP_LOGCONFIG(TAG, "  VirtualMatrix: %s", this->use_virtual_panel_ ? "ENABLED" : "disabled");
+            if (this->use_virtual_panel_) {
+                ESP_LOGCONFIG(TAG, "    Grid: %ux%u panels (total %u)",
+                              (unsigned)this->v_cols_, (unsigned)this->v_rows_,
+                              (unsigned)(this->v_cols_ * this->v_rows_));
+            }
+#endif
         }
 
         void MatrixDisplay::set_brightness(int brightness)
@@ -108,8 +126,8 @@ namespace esphome
             if (x >= this->get_width_internal() || x < 0 || y >= this->get_height_internal() || y < 0)
                 return;
 
-            // Update pixel value in buffer
-            this->dma_display_->drawPixelRGB888(x, y, color.r, color.g, color.b);
+            // Update pixel value in buffer (route via virtual when enabled)
+            this->draw_pixel_rgb888_(x, y, color.r, color.g, color.b);
         }
 
         inline uint8_t expand5to8(uint8_t v) { return (v << 3) | (v >> 2); }
@@ -142,19 +160,19 @@ namespace esphome
                         uint8_t g = expand6to8((pix565 >> 5)  & 0x3F);
                         uint8_t b = expand5to8( pix565        & 0x1F);
 
-                        this->dma_display_->drawPixelRGB888(x_start + xx, y_start + yy, r, g, b);
+                        this->draw_pixel_rgb888_(x_start + xx, y_start + yy, r, g, b);
                     }
                 } else { // 24-bit (RGB or BGR)
                     const uint8_t *src24 = ptr + row_base_px * 3;
                     if (order == ColorOrder::COLOR_ORDER_RGB) {
                         for (int xx = 0; xx < w; ++xx) {
                             const uint8_t *p = src24 + xx * 3;
-                            this->dma_display_->drawPixelRGB888(x_start + xx, y_start + yy, p[0], p[1], p[2]);
+                            this->draw_pixel_rgb888_(x_start + xx, y_start + yy, p[0], p[1], p[2]);
                         }
                     } else { // BGR
                         for (int xx = 0; xx < w; ++xx) {
                             const uint8_t *p = src24 + xx * 3;
-                            this->dma_display_->drawPixelRGB888(x_start + xx, y_start + yy, p[2], p[1], p[0]);
+                            this->draw_pixel_rgb888_(x_start + xx, y_start + yy, p[2], p[1], p[0]);
                         }
                     }
                 }
@@ -166,8 +184,8 @@ namespace esphome
             if (!this->dma_display_) return;
             if (!this->enabled_) return;
 
-            // Wrap fill screen method
-            this->dma_display_->fillScreenRGB888(color.r, color.g, color.b);
+            // Wrap fill screen method (route via virtual when enabled)
+            this->fill_screen_rgb888_(color.r, color.g, color.b);
         }
 
         void MatrixDisplay::filled_rectangle(int x1, int y1, int width, int height, Color color)
@@ -175,8 +193,19 @@ namespace esphome
             if (!this->dma_display_) return;
             if (!this->enabled_) return;
 
+#ifdef USE_VIRTUAL_PANEL
+            if (this->use_virtual_panel_) {
+                // Draw via per-pixel mapping when virtual wrapper is active
+                for (int yy = 0; yy < height; ++yy) {
+                    for (int xx = 0; xx < width; ++xx) {
+                        this->draw_pixel_rgb888_(x1 + xx, y1 + yy, color.r, color.g, color.b);
+                    }
+                }
+                return;
+            }
+#endif
             // Wrap fill rectangle method
-            this->dma_display_->fillRect(x1, y1, width, width, color.r, color.g, color.b);
+            this->dma_display_->fillRect(x1, y1, width, height, color.r, color.g, color.b);
         }
 
     } // namespace matrix_display
