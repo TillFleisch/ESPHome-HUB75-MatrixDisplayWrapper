@@ -162,19 +162,33 @@ namespace esphome
 
                         this->draw_pixel_rgb888_(x_start + xx, y_start + yy, r, g, b);
                     }
-                } else { // 24-bit (RGB or BGR)
-                    const uint8_t *src24 = ptr + row_base_px * 3;
-                    if (order == ColorOrder::COLOR_ORDER_RGB) {
-                        for (int xx = 0; xx < w; ++xx) {
-                            const uint8_t *p = src24 + xx * 3;
-                            this->draw_pixel_rgb888_(x_start + xx, y_start + yy, p[0], p[1], p[2]);
+                } else if (bitness == ColorBitness::COLOR_BITNESS_888) {
+#if LV_COLOR_DEPTH == 32
+                    // LVGL draw buffer is ARGB8888. Ignore alpha, honor endianness.
+                    const uint8_t *src = ptr + row_base_px * 4;
+
+                    for (int xx = 0; xx < w; ++xx) {
+                        const uint8_t *p = src + xx * 4;
+
+                        uint8_t r, g, b;
+                        if (big_endian) {
+                            // Big endian memory layout: [A][R][G][B]
+                            r = p[1]; g = p[2]; b = p[3];
+                        } else {
+                            // Little endian (ESP32): [B][G][R][A]
+                            r = p[2]; g = p[1]; b = p[0];
                         }
-                    } else { // BGR
-                        for (int xx = 0; xx < w; ++xx) {
-                            const uint8_t *p = src24 + xx * 3;
-                            this->draw_pixel_rgb888_(x_start + xx, y_start + yy, p[2], p[1], p[0]);
-                        }
+
+                        this->draw_pixel_rgb888_(x_start + xx, y_start + yy, r, g, b);
                     }
+#else
+                    // Should never happen with LVGL (no 24bpp mode). If we got here,
+                    // color_bitness reporting is inconsistent with LV_COLOR_DEPTH.
+                    ESP_LOGE(TAG, "Unexpected 888 bitness with LV_COLOR_DEPTH=%d", LV_COLOR_DEPTH);
+#endif
+                } else {
+                    // error, not supported
+                    ESP_LOGE(TAG, "Unexpected bitness=%d with LV_COLOR_DEPTH=%d", bitness, LV_COLOR_DEPTH);
                 }
             }
         }
