@@ -12,7 +12,7 @@ MatrixDisplaySwitch = matrix_display_switch_ns.class_(
     "MatrixDisplaySwitch", switch.Switch, cg.Component
 )
 
-CONFIG_SCHEMA = switch.SWITCH_SCHEMA.extend(
+CONFIG_SCHEMA = switch.switch_schema(MatrixDisplaySwitch).extend(
     {
         cv.GenerateID(): cv.declare_id(MatrixDisplaySwitch),
         cv.Required(MATRIX_ID): cv.use_id(MatrixDisplay),
