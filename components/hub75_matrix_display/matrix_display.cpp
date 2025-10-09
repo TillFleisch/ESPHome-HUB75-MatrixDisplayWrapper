@@ -17,7 +17,7 @@ namespace esphome
             // Handle "never" and 0 to avoid divide by 0
             if (this->update_interval_ == 4294967295 || this->update_interval_ == 0) {
                 // LVGL-driven: pick a constant
-                this->mxconfig_.min_refresh_rate = 120;  // Hz
+                this->mxconfig_.min_refresh_rate = 60;  // Hz
             } else {
                 this->mxconfig_.min_refresh_rate = 1000 / this->update_interval_;
             }
