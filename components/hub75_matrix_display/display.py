@@ -37,8 +37,64 @@ DRIVER = "driver"
 I2SSPEED = "i2sspeed"
 LATCH_BLANKING = "latch_blanking"
 CLOCK_PHASE = "clock_phase"
+DOUBLE_BUFFER = "double_buffer"
 
 USE_CUSTOM_LIBRARY = "use_custom_library"
+
+VIRTUAL_MATRIX = "virtual_matrix"
+VM_ENABLED = "enabled"
+VM_ROWS = "rows"
+VM_COLS = "cols"
+VM_CHAIN_TYPE = "chain_type"
+VM_SCAN_TYPE = "scan_type"
+
+# Accepted values map to ESP32-HUB75-VirtualMatrixPanel_T.hpp enums.
+VM_CHAIN_CHOICES = cv.one_of(
+    "CHAIN_TOP_LEFT_DOWN",
+    "CHAIN_TOP_RIGHT_DOWN",
+    "CHAIN_BOTTOM_LEFT_UP",
+    "CHAIN_BOTTOM_RIGHT_UP",
+    "CHAIN_TOP_LEFT_DOWN_ZZ",
+    "CHAIN_TOP_RIGHT_DOWN_ZZ",
+    "CHAIN_BOTTOM_LEFT_UP_ZZ",
+    "CHAIN_BOTTOM_RIGHT_UP_ZZ",
+    upper=True,
+)
+
+VM_SCAN_CHOICES = cv.one_of(
+    "STANDARD_TWO_SCAN",
+    "FOUR_SCAN_16PX_HIGH",
+    "FOUR_SCAN_32PX_HIGH",
+    "FOUR_SCAN_40PX_HIGH",
+    "FOUR_SCAN_40_80PX_HFARCAN",
+    "FOUR_SCAN_64PX_HIGH",
+    upper=True,
+)
+
+VIRTUAL_MATRIX_SCHEMA = cv.Schema(
+    {
+        cv.Required(VM_ENABLED): cv.boolean,
+        cv.Optional(VM_ROWS, default=1): cv.positive_int,
+        cv.Optional(VM_COLS, default=1): cv.positive_int,
+        cv.Optional(VM_CHAIN_TYPE, default="CHAIN_TOP_LEFT_DOWN"): VM_CHAIN_CHOICES,
+        cv.Optional(VM_SCAN_TYPE, default="STANDARD_TWO_SCAN"): VM_SCAN_CHOICES,
+    }
+)
+
+def _validate_virtual_matrix(config):
+    # Enforce chain_length == rows*cols when virtual matrix mapping is enabled.
+    vm = config.get(VIRTUAL_MATRIX)
+    if vm and vm.get(VM_ENABLED, False):
+        rows = vm.get(VM_ROWS, 1)
+        cols = vm.get(VM_COLS, 1)
+        required = rows * cols
+        chain_len = config.get(CHAIN_LENGTH, 1)
+        if chain_len != required:
+            raise cv.Invalid(
+                f"When virtual_matrix.enabled is true, chain_length must equal rows*cols "
+                f"({rows}*{cols}={required}), but chain_length is {chain_len}."
+            )
+    return config
 
 matrix_display_ns = cg.esphome_ns.namespace("matrix_display")
 MatrixDisplay = matrix_display_ns.class_(
@@ -70,12 +126,10 @@ CONFIG_SCHEMA = display.FULL_DISPLAY_SCHEMA.extend(
         cv.GenerateID(): cv.declare_id(MatrixDisplay),
         cv.Required(CONF_WIDTH): cv.positive_int,
         cv.Required(CONF_HEIGHT): cv.positive_int,
+        cv.Required(DOUBLE_BUFFER): cv.boolean,
         cv.Optional(USE_CUSTOM_LIBRARY, default=False): cv.boolean,
         cv.Optional(CHAIN_LENGTH, default=1): cv.positive_int,
         cv.Optional(BRIGHTNESS, default=128): cv.int_range(min=0, max=255),
-        cv.Optional(
-            CONF_UPDATE_INTERVAL, default="16ms"
-        ): cv.positive_time_period_milliseconds,
         cv.Optional(R1_PIN, default=25): pins.gpio_output_pin_schema,
         cv.Optional(G1_PIN, default=26): pins.gpio_output_pin_schema,
         cv.Optional(B1_PIN, default=27): pins.gpio_output_pin_schema,
@@ -94,18 +148,18 @@ CONFIG_SCHEMA = display.FULL_DISPLAY_SCHEMA.extend(
         cv.Optional(I2SSPEED): cv.enum(CLOCK_SPEEDS, upper=True, space="_"),
         cv.Optional(LATCH_BLANKING): cv.positive_int,
         cv.Optional(CLOCK_PHASE): cv.boolean,
+        cv.Optional(VIRTUAL_MATRIX): VIRTUAL_MATRIX_SCHEMA,
     }
 )
+# Post-parse validation (enforce relationships between fields)
+CONFIG_SCHEMA = cv.All(CONFIG_SCHEMA, _validate_virtual_matrix)
 
 
 async def to_code(config):
     if not config[USE_CUSTOM_LIBRARY]:
-        cg.add_library("SPI", None)
-        cg.add_library("Wire", None)
-        cg.add_library("Adafruit BusIO", None)
-        cg.add_library("adafruit/Adafruit GFX Library", None)
+        cg.add_build_flag("-DNO_GFX=1")
         cg.add_library(
-            "https://github.com/TillFleisch/ESP32-HUB75-MatrixPanel-DMA#optional_logging",
+            "https://github.com/mrcodetastic/ESP32-HUB75-MatrixPanel-DMA",
             None,
         )
 
@@ -166,6 +220,17 @@ async def to_code(config):
 
     if CLOCK_PHASE in config:
         cg.add(var.set_clock_phase(config[CLOCK_PHASE]))
+
+    vm = config.get(VIRTUAL_MATRIX)
+    if vm and vm[VM_ENABLED]:
+        cg.add_build_flag("-DUSE_VIRTUAL_PANEL=1")
+        cg.add_build_flag(f"-DVPANEL_CHAIN={vm[VM_CHAIN_TYPE]}")
+        cg.add_build_flag(f"-DVPANEL_SCAN={vm[VM_SCAN_TYPE]}")
+        cg.add(var.set_virtual_enabled(True))
+        cg.add(var.set_virtual_rows(vm[VM_ROWS]))
+        cg.add(var.set_virtual_cols(vm[VM_COLS]))
+    else:
+        cg.add(var.set_virtual_enabled(False))
 
     await display.register_display(var, config)
 
