@@ -12,11 +12,15 @@ MatrixDisplaySwitch = matrix_display_switch_ns.class_(
     "MatrixDisplaySwitch", switch.Switch, cg.Component
 )
 
-CONFIG_SCHEMA = switch.switch_schema(MatrixDisplaySwitch).extend(
-    {
-        cv.Required(MATRIX_ID): cv.use_id(MatrixDisplay),
-    }
-).extend(cv.COMPONENT_SCHEMA)
+CONFIG_SCHEMA = (
+    switch.switch_schema(MatrixDisplaySwitch)
+    .extend(
+        {
+            cv.Required(MATRIX_ID): cv.use_id(MatrixDisplay),
+        }
+    )
+    .extend(cv.COMPONENT_SCHEMA)
+)
 
 
 def to_code(config):
