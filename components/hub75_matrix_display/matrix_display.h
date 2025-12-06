@@ -125,13 +125,23 @@ namespace esphome
             }
 
             /**
-             * Sets the driver which will be used before display instantiation.
+             * Sets the shift driver which will be used before display instantiation.
              *
-             * @param driver Driver enum
+             * @param shift_driver Shift driver enum
              */
-            void set_driver(HUB75_I2S_CFG::shift_driver driver)
+            void set_shift_driver(HUB75_I2S_CFG::shift_driver shift_driver)
             {
-                this->mxconfig_.driver = driver;
+                this->mxconfig_.driver = shift_driver;
+            };
+
+            /**
+             * Sets the line driver which will be used before display instantiation.
+             *
+             * @param line_decoder line driver enum
+             */
+            void set_line_decoder(HUB75_I2S_CFG::line_driver line_decoder)
+            {
+                this->mxconfig_.line_decoder = line_decoder;
             };
 
             /**

@@ -34,6 +34,7 @@ OE_PIN = "OE_pin"
 CLK_PIN = "CLK_pin"
 
 DRIVER = "driver"
+LINE_DECODER = "line_decoder"
 I2SSPEED = "i2sspeed"
 LATCH_BLANKING = "latch_blanking"
 CLOCK_PHASE = "clock_phase"
@@ -46,14 +47,22 @@ MatrixDisplay = matrix_display_ns.class_(
 )
 
 shift_driver = cg.global_ns.namespace("HUB75_I2S_CFG").enum("shift_driver")
-DRIVERS = {
+SHIFT_DRIVERS = {
     "SHIFTREG": shift_driver.SHIFTREG,
     "FM6124": shift_driver.FM6124,
     "FM6126A": shift_driver.FM6126A,
     "ICN2038S": shift_driver.ICN2038S,
     "MBI5124": shift_driver.MBI5124,
-    "SM5266": shift_driver.SM5266P,
-    "DP3246_SM5368": shift_driver.DP3246_SM5368,
+    "DP3246": shift_driver.DP3246,
+}
+
+line_driver = cg.global_ns.namespace("HUB75_I2S_CFG").enum("line_driver")
+LINE_DRIVERS = {
+    "TYPE138": line_driver.TYPE138,
+    "TYPE595": line_driver.TYPE595,
+    "TYPE_DIRECT": line_driver.TYPE_DIRECT,
+    "SM5266P": line_driver.SM5266P,
+    "SM5368": line_driver.SM5368,
 }
 
 clk_speed = cg.global_ns.namespace("HUB75_I2S_CFG").enum("clk_speed")
@@ -90,7 +99,8 @@ CONFIG_SCHEMA = display.FULL_DISPLAY_SCHEMA.extend(
         cv.Optional(LAT_PIN, default=4): pins.gpio_output_pin_schema,
         cv.Optional(OE_PIN, default=15): pins.gpio_output_pin_schema,
         cv.Optional(CLK_PIN, default=16): pins.gpio_output_pin_schema,
-        cv.Optional(DRIVER): cv.enum(DRIVERS, upper=True, space="_"),
+        cv.Optional(DRIVER): cv.enum(SHIFT_DRIVERS, upper=True, space="_"),
+        cv.Optional(LINE_DECODER): cv.enum(LINE_DRIVERS, upper=True, space="_"),
         cv.Optional(I2SSPEED): cv.enum(CLOCK_SPEEDS, upper=True, space="_"),
         cv.Optional(LATCH_BLANKING): cv.positive_int,
         cv.Optional(CLOCK_PHASE): cv.boolean,
@@ -153,7 +163,10 @@ async def to_code(config):
     )
 
     if DRIVER in config:
-        cg.add(var.set_driver(config[DRIVER]))
+        cg.add(var.set_shift_driver(config[DRIVER]))
+
+    if LINE_DECODER in config:
+        cg.add(var.set_line_decoder(config[LINE_DECODER]))
 
     if I2SSPEED in config:
         cg.add(var.set_i2sspeed(config[I2SSPEED]))

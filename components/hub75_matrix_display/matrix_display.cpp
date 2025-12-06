@@ -76,11 +76,25 @@ namespace esphome
             case HUB75_I2S_CFG::shift_driver::MBI5124:
                 ESP_LOGCONFIG(TAG, "  Driver: MBI5124");
                 break;
-            case HUB75_I2S_CFG::shift_driver::SM5266P:
-                ESP_LOGCONFIG(TAG, "  Driver: SM5266P");
+            case HUB75_I2S_CFG::shift_driver::DP3246:
+                ESP_LOGCONFIG(TAG, "  Driver: DP3246");
                 break;
-            case HUB75_I2S_CFG::shift_driver::DP3246_SM5368:
-                ESP_LOGCONFIG(TAG, "  Driver: DP3246_SM5368");
+            }
+
+            // Log line_decoder
+            switch (cfg.line_decoder)
+            {
+            case HUB75_I2S_CFG::line_driver::TYPE138:
+                ESP_LOGCONFIG(TAG, "  Driver: TYPE138");
+                break;
+            case HUB75_I2S_CFG::line_driver::TYPE595: // SM5368 is an alias for TYPE595
+                ESP_LOGCONFIG(TAG, "  Driver: TYPE595 | SM5368");
+                break;
+            case HUB75_I2S_CFG::line_driver::TYPE_DIRECT:
+                ESP_LOGCONFIG(TAG, "  Driver: TYPE_DIRECT");
+                break;
+            case HUB75_I2S_CFG::line_driver::SM5266P:
+                ESP_LOGCONFIG(TAG, "  Driver: SM5266P");
                 break;
             }
 
